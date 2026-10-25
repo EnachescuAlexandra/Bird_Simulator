@@ -1,0 +1,36 @@
+{
+    "version": 1,
+    "name": "NonVR",
+    "maps": [
+        {
+            "name": "NonVR",
+            "id": "f515538e-40ae-474c-b90b-03e442a8818f",
+            "actions": [
+                {
+                    "name": "ActivateSmokeTarget",
+                    "type": "Button",
+                    "id": "75c40ffb-0b1d-4918-acad-f730181df67c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a6a2d901-8574-43dd-a9ea-7873be27408b",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ActivateSmokeTarget",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
