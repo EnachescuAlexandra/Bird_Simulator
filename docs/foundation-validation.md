@@ -1,4 +1,6 @@
-﻿# Foundation Validation
+> Privacy normalization (2026-10-25): personal checkout/home prefixes in this record are represented by `<REPO_ROOT>` and `<USER_HOME>`. These are documentation placeholders, not literal runnable paths. Relative paths, versions, commit/artifact hashes and test results are unchanged; original Git history was not rewritten.
+
+# Foundation Validation
 
 ## T001 Baseline — 2026-10-24
 
@@ -127,7 +129,7 @@ Package ID: `Unity.CLI`; registered name: `UnityTechnologies.UnityCLI`; package 
 
 ### Verified executable and release
 
-- Resolved command/alias: `C:\Users\crist\AppData\Local\Microsoft\WindowsApps\unity.exe`.
+- Resolved command/alias: `<USER_HOME>\AppData\Local\Microsoft\WindowsApps\unity.exe`.
 - Registered installation directory:
   `C:\Program Files\WindowsApps\UnityTechnologies.UnityCLI_1.0.0.20014_x64__2vrhnee42bhxm`.
 - `unity --version`: `1.0.0-beta.14`, exit 0; matches the planned CLI candidate.
@@ -177,7 +179,7 @@ package requirements, not verified newly installed versions. Existing direct Tes
 Executed only:
 
 ```powershell
-unity pipeline install --version 0.9.1-exp.1 --project-path 'C:/Users/crist/UnityProjects/Bird_Simulator/BirdLifeSimulator' --non-interactive --format json
+unity pipeline install --version 0.9.1-exp.1 --project-path '<REPO_ROOT>/BirdLifeSimulator' --non-interactive --format json
 ```
 
 CLI reported success, exit 0, exact project path, version 0.9.1-exp.1 and alreadyInstalled=false.
@@ -214,7 +216,7 @@ agent-plugin installation, MCP setup, XR setup, commit or push was performed.
 ### T003 resumed verification — 2026-10-24
 
 **Result**: passed; supersedes the pending-refresh blocker above. Exact target remains
-`C:\Users\crist\UnityProjects\Bird_Simulator\BirdLifeSimulator`.
+`<REPO_ROOT>\BirdLifeSimulator`.
 
 - Manifest, resolved lock and PackageCache metadata agree on Pipeline `0.9.1-exp.1`.
 - Resolved dependency versions: Test Framework `1.6.0` (retained), Mono Cecil `1.11.6`,
@@ -246,7 +248,7 @@ Inventory found no existing Unity CLI skill in repository/user skill locations; 
 `would-install`. Executed `unity skill install codex --local --format json`: exit 0, installed.
 Source: official embedded guidance shipped with Unity CLI **1.0.0-beta.14**, previously verified
 build commit `659e85ceeba50968f42615caf8459254bb0da3d3`; no separate skill semantic version declared.
-Location: `C:\Users\crist\UnityProjects\Bird_Simulator\.agents\skills\unity-cli`.
+Location: `<REPO_ROOT>\.agents\skills\unity-cli`.
 The tree contains 15 documentation files: SKILL.md, CHANGELOG.md, SECURITY.md and 12 references.
 No generators, services, runtime packages or full agent plugin were installed.
 
@@ -274,8 +276,8 @@ not applied. Instead appended only `[mcp_servers.unity]` to the user Codex confi
 
 ```toml
 [mcp_servers.unity]
-command = 'C:\Users\crist\AppData\Local\Microsoft\WindowsApps\unity.exe'
-args = ['mcp', '--project-path', 'C:\Users\crist\UnityProjects\Bird_Simulator\BirdLifeSimulator']
+command = '<USER_HOME>\AppData\Local\Microsoft\WindowsApps\unity.exe'
+args = ['mcp', '--project-path', '<REPO_ROOT>\BirdLifeSimulator']
 ```
 
 No Unity entry previously existed. Parsed TOML before/after and compared all data except the
@@ -305,7 +307,7 @@ scene or package changes were needed; no further manual reload required for T005
 unchecked until the requested visual comparison is received. No later task executed.
 
 T006: MCP eval returned Application.dataPath
-`C:/Users/crist/UnityProjects/Bird_Simulator/BirdLifeSimulator/Assets`, Editor `6000.3.25f1`,
+`<REPO_ROOT>/BirdLifeSimulator/Assets`, Editor `6000.3.25f1`,
 Play mode=false. list_open/get_hierarchy returned active loaded `Assets/Scenes/SampleScene.unity`,
 initial dirty=false, three roots: Main Camera (59272), Directional Light (59282),
 Global Volume (59290), no children. Project identity matched before mutation.
@@ -686,7 +688,7 @@ OpenXR policy/startup validated. Used the running Editor's BuildPipeline.BuildPl
 BuildPlayerWithProfileOptions and DetailedBuildReport; no second/batch Editor.
 
 **QuestStandalone: Succeeded**, 0 errors, 6 warnings, BuildReport duration 00:26:04.1559250.
-APK: `C:\Users\crist\UnityProjects\Bird_Simulator\BirdLifeSimulator\Builds\QuestStandalone\QuestStandalone.apk`
+APK: `<REPO_ROOT>\BirdLifeSimulator\Builds\QuestStandalone\QuestStandalone.apk`
 (47,231,216 bytes). BuildReport totalSize includes other output/debug files and is not APK size.
 APK SHA256: C30F0ED1E514CAA9A81D0A293FFCBCEB5722C84D66A3B05FD96DEFAB31AFA408.
 Ignored sibling files `QuestStandalone.build-result.txt` and `QuestStandalone.manifest.txt`
@@ -724,7 +726,7 @@ com.birdlife.simulator.touch, BIRDLIFE_TOUCH only, ARM64/IL2CPP and matching APK
 Used the same running-Editor profile-aware BuildPipeline API and DetailedBuildReport.
 
 **AndroidTouch: Succeeded**, 0 errors, 1 warning, duration 00:08:08.2960941.
-APK: `C:\Users\crist\UnityProjects\Bird_Simulator\BirdLifeSimulator\Builds\AndroidTouch\AndroidTouch.apk`
+APK: `<REPO_ROOT>\BirdLifeSimulator\Builds\AndroidTouch\AndroidTouch.apk`
 (42,110,316 bytes); SHA256 F630E5F7FEF6064737112220F41975FE5BD4D8A0D2FC6042E9BD4D9E6E4DCFB4.
 The warning concerns Diagnostics Data/debug symbols, not a compilation failure. MCP's 300-second
 call timeout again did not stop the build; no duplicate build was launched. Final BuildReport,
@@ -900,3 +902,35 @@ unconfirmed. T020/T021 retain pending hardware conditions/performance/comfort re
 T022 remains complete, T024 reproduction unexecuted and T025 final acceptance incomplete.
 No unchecked acceptance criterion is promoted to passed by this documentation change.
 No implementation, scene, package or project-setting changes, builds, staging, commit or push.
+
+### Repository hygiene/privacy audit — 2026-10-25
+
+Inspected all 739 tracked paths, file sizes/grouping, current ignore rules and relevant
+documentation/settings. No tracked cache/build/log/private-key/credential-named file or file
+over 5 MiB was identified. Unity source assets, metadata, packages/settings, AGENTS, Spec Kit
+documents and AI/source records remain tracked. No files were deleted or untracked.
+
+Added repository rules for Gitleaks JSON/SARIF/CSV output, local dotenv files, credential-store
+locations and common private-key/signing formats. Shared scanner configuration remains eligible
+for tracking. Example dotenv files are eligible only for placeholder content, never real secrets.
+Ignore rules do not sanitize files already tracked or secrets embedded in ordinary source/docs.
+
+Personal home/checkout prefixes in this record were normalized to <USER_HOME>/<REPO_ROOT>;
+executable versions, relative artifact paths, hashes and outcomes were preserved. Current
+public setup instructions already use configurable examples. No Git history was rewritten:
+older commits still contain earlier documentation. Changing repository visibility does not
+erase previously published copies. A username/path alone is not an API credential.
+
+User reports Gitleaks scanned all four commits with one Atlassian-token finding. This audit
+does not claim a new full-history Gitleaks run. The earlier verified false positive is an
+example jiraProjectConfigId in the official Unity CLI skill (line 496, foundation commit
+7ddb8edf92a5c6e05db97c212907f085fe6a194c); whole-document upstream comparison matched ignoring
+line endings. No detected value is reproduced. Source/licensing and narrowly scoped exception
+guidance are in third-party-assets.md; no scanner suppression was added.
+
+Unity CLI guidance is 15 files/about 0.56 MiB. Recommendation: retain the documented snapshot
+for reproducibility, with official upstream attribution/license reference. Installation-only
+is an optional future maintenance decision, requiring approval before untracking. No currently
+tracked file requires automatic untracking; optional XRI/demo cleanup remains a separate
+dependency-checked Editor task. Local reports/credentials/cache/build outputs should remain
+excluded. All unfinished acceptance checks retain their previous status.

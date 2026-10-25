@@ -100,8 +100,7 @@ args = ['mcp', '--project-path', 'C:\path\to\Bird_Simulator\BirdLifeSimulator']
 Reload the VS Code window after configuration changes. T006/T007 recorded project identity,
 hierarchy read and a unique temporary-object create/read/delete/absence check; see validation
 for the original dirty-state caveat and later user-authorized save. Do not repeat edits merely
-to reconfirm completed setup. Historical absolute paths in validation identify the tested
-checkout; new checkouts must substitute their own project and executable locations.
+to reconfirm completed setup. Historical paths in validation use privacy-normalized placeholders; new checkouts must substitute their own project and executable locations.
 
 ### Profile selection and build outputs
 
@@ -166,5 +165,5 @@ need explicit platform/quality review before a future Windows build. Do not reve
 files independently of profiles merely to reduce the diff. Samples and their metadata remain.
 
 Pipeline Auto Start=false is intentionally retained; manual server start after reload remains
-documented. Public setup examples use configurable paths; literal tested paths in the
-validation history are retained only as provenance. Nothing has been staged, committed or pushed.
+documented. Public setup examples use configurable paths; privacy-normalized tested paths in the
+validation history retain provenance without the local account name. Nothing has been staged, committed or pushed.

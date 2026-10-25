@@ -21,3 +21,30 @@ remove sample subtrees to reduce the Git count: references can cross sample fold
 modern simulator and demo art can be assessed for removal in a separately authorized Editor
 cleanup, with dependency checks. No such removal occurred here. Human attribution review
 remains pending; no legal clearance or exhaustive license review is asserted.
+
+## Official Unity CLI guidance
+
+The tracked `.agents/skills/unity-cli/` directory contains 15 documentation files, about
+0.56 MiB, installed from Unity CLI 1.0.0-beta.14 (build provenance in validation). Retaining
+this snapshot makes the guidance used during foundation work reproducible; it is not a
+runtime package, credential store or build requirement. Do not install another copy merely
+to resolve a scanner finding.
+
+Upstream: [Unity-Technologies/skills](https://github.com/Unity-Technologies/skills).
+Upstream attribution: **Unity Skills © 2026 Unity Technologies**, licensed under the
+[Unity Companion License for Unity-dependent projects](https://github.com/Unity-Technologies/skills/blob/main/LICENSE.md).
+Preserve this attribution and upstream license reference; the project does not relicense
+the guidance. Human source/license review remains distinct from AI-record review.
+
+Recommendation: keep the current snapshot for this checkpoint. A separately approved future
+switch to installation-only should record the exact CLI/skill source version, preserve these
+provenance notes and verify installation on a clean checkout before untracking it. No skill
+files were removed, ignored or untracked by this audit.
+
+Confirmed scanner false positive: `references/collaboration.md`, line 496 at foundation
+commit `7ddb8edf92a5c6e05db97c212907f085fe6a194c`, is `jiraProjectConfigId` in a JSON example,
+not an authentication field. Prior read-only comparison matched the complete official
+[upstream file](https://github.com/Unity-Technologies/skills/blob/main/skills/unity-cli/references/collaboration.md),
+ignoring line endings. The detected value is intentionally omitted here. Do not suppress the
+entire skill directory or Atlassian rule; any future scanner exception must be specific to
+this documented finding. No exception/configuration change was made during this audit.

@@ -59,3 +59,27 @@ ExportedObj/
 !/BirdLifeSimulator/Assets/**
 !/BirdLifeSimulator/Packages/**
 !/BirdLifeSimulator/ProjectSettings/**
+
+# Local security scan output can contain detected secret values. Keep scan configuration tracked.
+gitleaks*.json
+gitleaks*.sarif
+gitleaks*.csv
+
+# Local credentials/signing material; these rules intentionally follow source-asset exceptions.
+.env
+.env.*
+!.env.example
+!.env.template
+/.aws/
+/.ssh/
+/.codex/auth.json
+/credentials.json
+/secrets.json
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+id_rsa
+id_ed25519
