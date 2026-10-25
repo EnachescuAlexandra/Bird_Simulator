@@ -37,6 +37,7 @@ samples retain their separate provenance in [third-party assets](third-party-ass
 | 2026-10-24 | Native build profiles, OpenXR/XRI setup and `FoundationBuildGuard.cs` | User configured Quest OpenXR validation; guard regression reported by user and corrected; post-fix Play and restart checks confirmed; effective XR policies checked |
 | 2026-10-24 | Both APK builds and manifest/report inspection | Both succeeded; SHA256, messages and limitations recorded; user subsequently reported Quest 2 tracking/trigger and Android 15 functionality |
 | 2026-10-25 | README, this record, attribution, validation/continuation/task updates and Git audit | Documentation/file inspection only; no new builds or implementation changes. `.utmp` ignore and removal of temporary constitution review comment verified from interrupted work |
+| 2026-10-25 | Week 2 specification, technical design/research, contracts, validation guide and tasks in `specs/002-flight-system/`; README roadmap | Student supplied milestone/scope and eight-hour budget. Codex inspected committed architecture and official movement/XR/input documentation; document consistency reviewed, no flight implementation/runtime/build/device test performed |
 
 Human confirmations cover the specific reported tests, not an independent audit of all code,
 licenses, documentation or performance. No measured frame timing, timed warm-up/observation,

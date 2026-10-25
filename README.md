@@ -63,7 +63,10 @@ Only milestones supported by the project records are listed.
 
 | Week | Verified progress |
 | --- | --- |
-| 19–25 October 2026 | **24 October:** technical foundation, Editor checks and both APK builds completed. **25 October:** documentation and Git audit consolidated, including previously reported basic device tests. |
+| Week 1 · 19–25 October 2026 | Technical foundation completed as a local checkpoint: Editor checks, two APK builds and reported basic device tests. Performance/comfort, fresh reproduction and remaining acceptance reviews are still pending. |
+| Week 2 · 26 October–1 November 2026 | **Planned:** first flight prototype: woodland greybox, mock blackbird and keyboard-controlled shared flight. Quest button input/device trial next; motion wingbeats and touch controls stretch. About eight working hours; [specification and tasks](specs/002-flight-system/spec.md). |
+| Week 3 · 2–8 November 2026 | **Planned:** food collection, objectives and restart; detailed scope to be specified later. |
+| Week 4 · 9–15 November 2026 | **Planned:** integration, testing and demonstration; no completion or validation implied. |
 
 ## Getting Started
 

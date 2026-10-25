@@ -10,3 +10,12 @@
 - Do not add features, packages, or updates that are unnecessary for the requested stage.
 - Commit or push only when the user explicitly requests it.
 - Communicate with the user in Romanian and briefly explain the changes.
+
+## Architecture and Task Verification
+
+- Maintain one shared, platform-independent `BirdMotor`. Keep PC, Android and Quest input adapters separate; do not duplicate movement rules across platforms.
+- Keep bird visuals and animations separate from physics and gameplay. Future mission, collectible and educational systems must remain independent from the flight motor.
+- Prefer extending suitable existing components over introducing duplicate managers or parallel systems. Avoid unnecessary abstractions, singleton managers, premature generalization and unrelated project reorganization or refactoring.
+- Keep each script focused on one responsibility and document important integration points.
+- Preserve the working Foundation smoke scene, XR configuration and build profiles; assess regression risks before extending them.
+- Before implementing a task, inspect related existing code and scene references. After implementation, verify compilation, relevant behavior and regression risks; report unexecuted checks as pending.
