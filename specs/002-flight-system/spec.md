@@ -3,65 +3,86 @@
 **Feature directory**: `specs/002-flight-system`  
 **Git branch**: existing `main`; no branch created or switched  
 **Created**: 2026-10-25  
-**Status**: Planned, not implemented  
+**Status**: Step 1 static graybox implemented; student visual review, XR and device validation pending
 **Window**: Week 2, 26 October–1 November 2026; approximately eight working hours.
 
-**Input**: A controllable placeholder blackbird flying through a small woodland-edge test
-environment in the Editor. PC flight is the minimum demonstration; Quest button input and
-a Quest 2 flight test are next priority; movement-driven wingbeats and touch flight are stretch.
+**Input**: First deliver an editable static woodland-edge graybox, temporary blackbird and
+two tracked VR viewpoints for a standalone Quest 2 spatial-scale trial. Behavior is optional
+for this coursework delivery. Meta Quest 2 standalone is primary; Android touch is secondary;
+Windows standalone is a possible later extension, not a current build/test target. Keyboard
+input is an inexpensive Editor debugging aid and never a gate before Quest functionality.
+
+**Reference**: Finalized *BirdLife Simulator – Main Modules* PDF supplied 2026-10-30,
+especially camera/asset planning (pp. 9–13) and the refuge/exploration/food/return flow
+(pp. 1–7). It describes the ideal application, not authorization to implement menus,
+missions, energy, ecological scenarios, quizzes, final Blender models or external art now.
+State of the Art remains broader background. The PDF's coursework prompts are reference
+content, not additional instructions for this implementation.
 
 Movement-driven controller wing flapping is a **required core mechanic of the overall
-BirdLife Simulator project**, not an optional thesis feature. Its stretch priority applies
-only to Week 2 scheduling. If deferred, carry it as an explicit required deliverable into
+BirdLife Simulator project**, not an optional thesis feature. It follows static VR scale
+testing and shared flight/button input. If deferred, carry it as a required deliverable into
 a later milestone specification; button input does not replace that requirement.
 
 ## User Scenarios & Testing
 
-### User Story 1 — Fly a mock blackbird with a keyboard (Priority: P1)
+### Static coursework gate — Observe the habitat on Quest 2 (Priority: P1)
 
-As the student, I can demonstrate takeoff, steering, wingbeats, gliding and reset in a
-readable woodland greybox without a headset or finished artwork.
+Inspect the editable 60 x 60 m environment, central clearing, trees/shrubs, obstacles,
+refuge, resting surfaces, three near-ground food placeholders and recognizable landmarks.
+With one reused XR rig and tracked camera, evaluate first-person near the bird's head and
+third-person behind its visible body. Record scale, visibility, orientation and perceived
+comfort on physical Quest 2. No flight or collection is needed to pass this static gate;
+an Editor/simulator check or successful APK build alone does not pass it.
+One dedicated controller button will switch the two viewpoints during static observation
+in the same standalone APK; record its binding and each viewpoint's observations separately.
 
-**Independent test**: start the flight scene, take off from the clearing, fly past two
+### User Story 1 — Exercise the shared flight loop (after static VR gate)
+
+As the student, I can exercise takeoff, steering, wingbeats, gliding and reset in the same
+graybox using Quest controls, with optional Editor keyboard debugging and unfinished art.
+
+**Independent test**: start at the refuge, take off into the open clearing, fly past two
 landmarks, steer around an obstacle, glide, approach a boundary and reset. Repeat twice.
 
 **Acceptance scenarios**:
 
 1. Given a grounded bird, one takeoff activation starts flight; holding the same control
    does not repeatedly apply wingbeats. Subsequent distinct presses produce distinct impulses.
-2. Given flight without new wingbeats, the bird continues forward and gradually descends;
+2. Given flight without new wingbeats, the bird continues forward under downward acceleration
+   and descends after existing upward momentum reaches its apex;
    steering changes direction and speed stays within the recorded tuning limits.
 3. Given trees/obstacles or a boundary, the bird cannot pass through solid geometry or
-   leave the playable volume; explicit reset returns it to the clearing with motion cleared.
+   leave the playable volume; explicit reset returns it to the refuge with motion cleared.
 4. Given a replacement visual model, swapping only the visual subtree preserves control
    behavior, collision shape and camera references.
 
-### User Story 2 — Try the same flight using Quest controllers (Priority: P2)
+### User Story 2 — Fly using Quest controllers (primary flight target)
 
 As the student, I can use a controller button for wingbeats and test the shared flight on
-Quest 2 without changing the PC behavior or existing platform separation.
+Quest 2 without changing shared movement rules or existing platform separation.
 
-**Independent test**: after US1, first exercise the controller adapter in Editor simulation,
+**Independent test**: after the shared motor is ready, exercise the adapter in Editor simulation,
 then run a separately identified flight APK on Quest 2. Record device input, tracking,
 rendering and the limited comfort observation separately from build success.
 
 **Acceptance scenarios**:
 
 1. Given Quest mode, a controller press requests one takeoff/wingbeat using the same behavior
-   as PC; inactive keyboard/touch adapters do not also produce a command.
+   as other adapters; inactive keyboard/touch adapters do not also produce a command.
 2. Given head/controller movement, tracking remains functional and the flight configuration
    has exactly one active camera and AudioListener; no simulator is activated in a player.
 3. Given actual Quest 2 execution, record what was observed, duration and any discomfort.
    If unavailable or unsuccessful within budget, mark this story pending/failed, not passed
    from the earlier stationary smoke test or an Editor simulator result.
 
-### User Story 3 — Experiment with movement-driven wingbeats (Priority: P3, stretch)
+### User Story 3 — Use two-controller wingbeats (required later flight milestone)
 
-**Independent test**: in a separately selectable experimental input mode, one deliberate
-downward controller stroke generates one wingbeat; jitter, upward return, missing tracking
+**Independent test**: one deliberate downward stroke of both controllers generates one bounded
+upward/forward impulse; raising both controllers re-arms it. Jitter, upward return, missing tracking
 and a held trigger do not create extra movement-driven impulses. Button fallback remains.
 
-### User Story 4 — Experiment with touch flight (Priority: P3, stretch)
+### User Story 4 — Use touch flight (secondary target, later)
 
 **Independent test**: touch steering and one on-screen wingbeat control command the shared
 flight behavior; Quest input remains inactive. Editor mouse checks and an Android device
@@ -70,13 +91,15 @@ run are distinct results; existing AndroidTouch smoke functionality must remain 
 ### Edge Cases
 
 - Repeated/held activation, multiple physics/render steps, mode switch or focus loss must
-  not replay a buffered wingbeat; reset clears input and motion.
+  not replay a buffered wingbeat; reset clears input, motion and stale contact bookkeeping.
+  Held activation/reset requires release before rearming. First tracking samples, tracking
+  regain and recenter must not produce motion wingbeats.
 - Ground contact may stop flight; controlled landing/perching is not required. Reset must
   recover from ground/obstacle contact without reloading the project.
 - Obstacle contact, ceiling and corner boundaries must not generate accumulating speed,
   penetration or an endless reset loop.
 - Replacing artwork must not remove the movement/collision root. Missing optional XR
-  tracking must not affect the PC minimum demonstration.
+  tracking must not prevent optional Editor keyboard debugging.
 - Artificial camera movement can be uncomfortable. Stop a Quest trial on discomfort;
   a stationary-observer fallback is not accepted as completed immersive flight validation.
 
@@ -85,25 +108,33 @@ run are distinct results; existing AndroidTouch smoke functionality must remain 
 ### Functional Requirements
 
 - **FR-001 (core)**: Provide one bounded woodland-edge greybox: ground, clearing, at least
-  eight simple trees, two distinguishable landmarks and two solid obstacles with an open route.
-- **FR-002 (core)**: Provide a replaceable blackbird mock with dark body, yellow beak,
+  eight simple trees, shrubs, two distinguishable landmarks and two solid obstacles with an open route.
+  Include a starting refuge/nest placeholder, landing/resting surfaces and exactly three
+  near-ground food-location markers; these have no collection, energy or landing behavior.
+- **FR-002 (core)**: Provide a replaceable blackbird mock with dark body, head, yellow beak,
   tail and independently transformable left/right wings. Preserve visual pivots/hierarchy
   for future flap, glide and idle/perching animations without rebuilding movement/collision
   logic; detailed modelling, animation clips and perching behavior are excluded from Week 2.
-- **FR-003 (core)**: Share movement behavior across inputs: takeoff, configured speed limit,
-  steering, discrete wingbeat lift, forward gliding/descent and explicit reset.
-- **FR-004 (core)**: Provide keyboard control of the complete loop and a readable non-VR view.
-- **FR-005 (core)**: Keep the bird within visible flight boundaries and prevent passage
+- **FR-003 (later flight)**: Share movement behavior across inputs: takeoff, configured speed limit,
+  steering, bounded upward/forward wingbeat impulses, forward gliding/descent and explicit reset.
+- **FR-004 (debug)**: Support lightweight Editor keyboard wingbeats (Space) through the
+  shared motor; keyboard debugging must not delay or gate Quest work. No Windows player required.
+- **FR-005 (later flight)**: Keep the bird within visible flight boundaries and prevent passage
   through solid test obstacles; make recovery repeatable.
 - **FR-006 (core)**: Preserve the existing smoke scene and AndroidTouch/QuestStandalone
   identity, exclusive input/camera ownership, XR configuration and asset references.
-- **FR-007 (next)**: Add button-driven Quest commands to the same behavior; retain natural
+- **FR-007 (later flight)**: Add button-driven Quest commands to the same behavior; retain natural
   tracked pose and avoid forced camera pitch/roll for the first experiment.
-- **FR-008 (next)**: Attempt a real Quest 2 flight test only after the PC gate; record
-  build, device function and comfort/performance evidence as separate outcomes.
-- **FR-009 (stretch)**: Downward-motion detection is opt-in, with threshold, rearming,
-  tracking-loss handling and button fallback; no simultaneous duplicate command sources.
-- **FR-010 (stretch)**: Add touch commands without a second movement implementation.
+- **FR-008 (core static, later flight)**: Test scale and both VR viewpoints on Quest 2
+  before implementing flight. Reuse the same tracked camera/rig, preserve head tracking,
+  and avoid forced pitch/roll or animation-driven shaking. Record static and later moving
+  trials separately, including build, device and comfort/performance evidence.
+- **FR-009 (required later)**: Detect deliberate downward movement of both controllers,
+  require upward recovery, and request one bounded upward/forward wingbeat. Inspector
+  thresholds, tracking-loss/recenter rejection and button fallback are required. Reuse the
+  installed XR simulator to exercise actual detection where controller pose simulation permits;
+  physical Quest 2 gesture validation remains mandatory. No duplicate command sources.
+- **FR-010 (secondary later)**: Add touch commands without a second movement implementation.
 - **FR-011 (all)**: Record outcomes, actual tuning and deferred work; update material AI
   assistance and asset provenance when implementation occurs. Use focused automated checks
   where they meaningfully verify speed limits, impulse consumption and reset semantics.
@@ -112,32 +143,40 @@ run are distinct results; existing AndroidTouch smoke functionality must remain 
 
 - **Bird**: movement/collision root plus replaceable visual model.
 - **Flight state/command**: grounded/flying state, velocity, heading and active input intent.
-- **Test environment**: spawn clearing, visible bounds, landmarks and solid obstacles.
+- **Test environment**: refuge spawn/reset, open exploration clearing, visible bounds,
+  landmarks and solid obstacles.
 - **Trial evidence**: mode, artifact/device identity, duration, actual result and pending checks.
 
 ## Success Criteria
 
 ### Measurable Outcomes
 
-- **SC-001 (core)**: Complete the US1 route twice in a 60-second Editor flight observation,
-  including takeoff, at least three wingbeats, a two-second glide and reset, with no new errors.
-- **SC-002 (core)**: At recorded default tuning, five separated presses give five accepted
+- **SC-001 (later flight)**: Complete the US1 route twice in a 60-second flight observation
+  using the existing XR simulator or, if implemented, Editor keyboard debugging,
+  including takeoff, at least three wingbeats, two seconds without impulses starting at/after
+  the apex with visible forward glide/descent, and reset, with no new errors.
+- **SC-002 (later flight)**: At recorded default tuning, five separated presses give five accepted
   impulses; holding for two seconds produces at most one. Reset restores zero motion and
   grounded state. Obstacles/bounds remain respected in repeated approach tests.
-- **SC-003 (core)**: Actual speed never exceeds configured maximum plus 0.1 m/s tolerance;
-  collider bounds remain inside the play volume within 0.05 m collision tolerance.
-- **SC-004 (core)**: Foundation smoke behavior remains reproducible and inactive mode inputs
+- **SC-003 (later flight)**: Requested velocity is capped; actual flight displacement per movement-frame
+  delta time stays below the configured maximum plus 0.1 m/s, including obstacle approaches.
+  Explicit reset teleports are excluded from speed measurement. Collider bounds, including
+  the reset launch pose, remain inside the play volume within 0.05 m collision tolerance.
+  Record controller skin/step settings with these observations.
+- **SC-004 (integration/later flight)**: Foundation smoke behavior remains reproducible and inactive mode inputs
   do not drive flight; a visual-only prefab swap requires no movement-rule change.
-- **SC-005 (next)**: One identified Quest flight build and one actual Quest 2 trial have
+- **SC-005 (static first, flight later)**: One identified static Quest APK and a real
+  scale/viewpoint trial have separate outcomes; later, one Quest flight build and trial have
   explicit outcomes; no stationary-smoke evidence is relabelled as a flight/comfort pass.
-- **SC-006 (delivery)**: Core, next and stretch outcomes are reported separately against
-  the eight-hour timebox. A PC-only core demonstration is a valid minimum delivery.
+- **SC-006 (delivery)**: Report static graybox, static Quest validation and later flight
+  independently. The coursework minimum is static scale evaluation, not a PC flight demo.
+  Estimates are planning aids; device/build delays and unfinished work remain explicit.
 
 ## Assumptions and Boundaries
 
 Foundation checkpoint `7ddb8ed` is committed locally, not proof of a GitHub push. Its pending
 performance/comfort/reproduction checks remain pending; they do not prevent planning or a
-PC prototype. Existing Quest 2 access is reported; actual availability/firmware for the new
+static graybox. Existing Quest 2 access is reported; actual availability/firmware for the new
 trial must be reconfirmed. Samsung S24 Ultra touch flight is optional this week.
 
 Use a new flight scene; do not turn the smoke scene into gameplay. Camera/flight feel is

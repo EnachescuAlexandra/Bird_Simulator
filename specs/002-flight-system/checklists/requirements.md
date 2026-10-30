@@ -13,17 +13,22 @@
 ## Requirement Completeness
 
 - [x] No unresolved clarification markers; reversible initial camera/tuning choices are documented.
-- [x] Core, next-priority and stretch requirements are separated.
+- [x] Static Quest coursework, later required flight/gestures and secondary touch are separated.
 - [x] Acceptance scenarios and measurable speed/bounds/impulse/reset outcomes are defined.
-- [x] Edge cases, dependencies, exclusions and eight-hour fallback are recorded.
-- [x] No food/landing/energy/art/animation scope expansion is required.
+- [x] Edge cases, revised dependencies, exclusions and realistic staged estimates are recorded.
+- [x] Food/refuge/rest placeholders are static; collection, landing behavior, energy,
+  final art and animation systems remain excluded from the static coursework gate.
 
 ## Feature Readiness
 
 - [x] Each story has an independently runnable validation scenario after its dependencies.
-- [x] Requirements map to observable outcomes and implementation tasks.
+- [x] Requirements map to observable outcomes and tasks, including T012 static Quest
+  evaluation and T017 real flight validation before T013 gesture tuning.
 - [x] Existing smoke/XR setup and pending foundation evidence are preserved.
 - [x] Editor, build, hardware, comfort and performance results remain distinct.
 
 Review result: specification ready for implementation planning/task execution. Checked items
-are document-quality findings only. All feature implementation tasks remain unchecked.
+are document-quality findings only. Re-reviewed 2026-10-30 for Quest-first static scale
+evaluation and Main Modules reference; corrected for refuge start/reset, standalone viewpoint
+switching and T017 flight validation. Implementation/manual acceptance remain separate;
+known collider limitations are documented, not marked as verified collision behavior.

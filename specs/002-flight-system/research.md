@@ -3,6 +3,14 @@
 Date: 2026-10-25. Reused foundation findings and inspected current scripts/manifest/lock;
 researched only new movement/input/XR design questions. No installations or runtime checks.
 
+2026-10-30 correction: Main Modules final PDF and the user's revised priority place static
+Quest graybox/viewpoint evaluation before flight. Preserve the research decisions below;
+keyboard debugging is not a Quest prerequisite. Reuse ProBuilder 6.1.4 and the installed
+XR simulator; two-controller gestures remain required later. No new external assets now.
+Checkpoint clarification: refuge start/reset and open exploration clearing; one controller
+button selects the two static viewpoints in the same APK. T017 records real button/joystick
+flight validation before T013 gesture tuning. These are planned behaviors, not new test results.
+
 Workflow note: the installed specify/plan/tasks skills and template structures were read.
 PowerShell execution policy blocked resolve-template/setup-plan (and therefore setup-tasks
 was not attempted). No policy was changed or bypassed. No preset/override/extension directories
@@ -16,7 +24,7 @@ the equivalent documents. Feature selection metadata points to this feature; bra
 | Separate flight scene and scene-local mode wiring | FoundationMode bootstraps only FoundationSmoke and has smoke-specific references | Renaming/replacing the regression scene or forcing its smoke adapter into flight rejected |
 | Preserve existing rigs; translate XR Origin, natural tracked rotation | No replacement XR stack, no tracking-transform writes or competing locomotion writers; fixed horizon for initial trial | Forced bank/pitch/yaw and physical-wing input deferred pending comfort experiment |
 | Extend exact scene/output policy only before device build | Current guard otherwise rejects FlightPrototype; preserve foundation artifact evidence and XR isolation | Disabling guard or overwriting the foundation APK without identity separation rejected |
-| Button first; motion/touch stretch | Baseline should demonstrate flight before gesture tuning and cross-device UI | No gesture framework or new Meta SDK |
+| Static Quest scale/viewpoints first; shared flight/button next; required motion then secondary touch | Coursework allows static observation; keyboard is only an Editor aid, never a Quest gate | No gesture framework, Meta XR Simulator, new SDK or Windows player work |
 
 Official documentation consulted (no package upgrades implied):
 
