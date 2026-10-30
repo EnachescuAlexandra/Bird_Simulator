@@ -6,17 +6,16 @@
 ## Summary
 
 Deliver a static `FlightPrototype` woodland graybox first, then the primitive bird/reused
-XR rig, two viewpoints and an identified static Quest APK for real scale evaluation.
+XR rig and two viewpoints. Continue to the minimal shared flight prototype before user-run APK/device gates.
 Meta Quest 2 standalone is primary, Android touch secondary, Windows standalone optional
 later. Keyboard is an Editor debugging aid and never a prerequisite for Quest functionality.
 Main Modules (final PDF supplied 2026-10-30, pp. 9–13) guides layout and replaceable assets;
 its ideal menus, missions, energy, scenarios and final art remain outside this stage.
 
-After static scale testing, use one upright
+After T007, implement one upright
 CharacterController and an arcade BirdMotor with explicit velocity/gravity and discrete
 wingbeats; device adapters submit the same commands. Retain existing foundation assets.
-Add Quest joystick/button input and a flight trial; two-controller gestures are required later,
-followed by secondary touch controls. Reuse the installed XR simulator for Editor testing.
+Add Editor keyboard and Quest joystick/button adapters, then Android touch steering/wingbeat and a simple bird-following non-XR camera. Two-controller gestures remain required later. Reuse FoundationMode runtime switching and the installed XR simulator.
 Deferring motion-driven wingbeats postpones a required project mechanic, not its acceptance:
 carry it into a later milestone specification if T013 is not completed this week.
 
@@ -55,17 +54,17 @@ BirdLifeSimulator/Assets/
   Flight/
     Editor/FlightGrayboxBuilder.cs
     Materials/Graybox*.mat
-    Runtime/{BirdMotor,FlightDynamics,FlightCommand}.cs
+    Runtime/Core/{BirdMotor,FlightDynamics,FlightCommand}.cs
     Prefabs/MockBlackbird.prefab
     Input/Flight.inputactions
     Input/Adapters/{KeyboardFlightInput,QuestFlightInput}.cs
     Input/Adapters/BirdLife.Flight.Input.asmdef
     Tests/EditMode/{FlightDynamicsTests.cs,BirdLife.Flight.EditModeTests.asmdef}
-    Runtime/BirdLife.Flight.asmdef
+    Runtime/Core/BirdLife.Flight.asmdef
 ```
 
-The small Flight runtime assembly keeps deterministic motion checks testable without input,
-XR or scene dependencies. Required later motion and secondary touch adapters stay in this folder.
+The Runtime/Core assembly scope excludes existing XR scene scripts without moving them. The small Flight runtime assembly keeps deterministic motion checks testable without input,
+XR or scene dependencies. Required later motion and current secondary touch adapters stay in this folder.
 Keep the same AndroidTouch/QuestStandalone identities and compile defines in explicit
 flight-scene mode configuration. Do not reference Assembly-CSharp's FoundationMode from
 the new runtime asmdef or create a dependency cycle. Adapters reference Flight runtime and
@@ -125,7 +124,7 @@ semantics in the flight contract govern T005/T006/T008/T010/T013 without additio
   Sample then consume once per render frame in explicit order; clear edges/held intent on
   reset, disable, focus/mode change and require release-to-rearm. Gameplay maps have one owner;
   rig InputActionManager must not activate inactive maps. Serialize bindings before XR startup.
-- **Quest flight after static gate**: trigger press for takeoff/flap; reuse the existing XRI left-hand movement
+- **Quest flight (Editor first; user device validation pending)**: trigger press for takeoff/flap; reuse the existing XRI left-hand movement
   Vector2 binding for steering/throttle, resolving its exact binding during wiring. Translate
   an independent XR Origin by actual post-collision displacement, preserving tracked offsets,
   child transforms and unit scale without inheriting bird rotation; first trial
@@ -143,7 +142,7 @@ semantics in the flight contract govern T005/T006/T008/T010/T013 without additio
   diagnostics only; no test framework, custom debug UI, Meta simulator or package changes.
   Editor checks do not pass real Quest gestures or comfort.
 - **Build blocker**: FoundationBuildGuard currently permits only FoundationSmoke as the
-  sole enabled scene. In Step 3 before the static Quest trial, extend its explicit scene allowlist
+  sole enabled scene. In minimal T011 preparation after focused T009/T015, extend its explicit scene allowlist
   to FoundationSmoke OR FlightPrototype and select that one scene in native profiles through
   the Editor. Retain all XR/profile checks. Make Output choose FlightPrototype.apk for the
   flight entry scene, keeping existing foundation APK/report paths intact. Validate smoke
@@ -156,14 +155,11 @@ semantics in the flight contract govern T005/T006/T008/T010/T013 without additio
 | --- | --- | --- |
 | Step 1: T001, T003 | 60–90 | Editable static scene; no gameplay/XR build changes |
 | Step 2: T004, T008 | 60–90 | Replaceable mock and one reused rig |
-| Step 3: T007, T011 | 45–75 | Two static tracked viewpoints and narrow guard adjustment |
-| Step 4: T012 | 60–120+ | Distinct APK; real scale trial recorded separately |
-| Later: T002, T005, T010, T006, T009, T017, T013 | Re-estimate after scale trial | Shared flight, Quest input, optional Editor debugging, physical flight trial, then required gestures |
+| T007 -> T002 -> T005 -> T006/T010 -> T014 | Re-estimate at implementation | Viewpoints, one motor, keyboard/Quest/touch adapters and Android following camera |
+| Focused T009/T015 -> minimal T011 | Targeted checks only | Editor flight/input isolation; existing guard/profile handoff, no build |
+| User end gates: T012, T017, Android T015 | User-owned | Android/Quest builds, installation, static scale/comfort and physical flight checks; T013 gestures later |
 
-Protect static Quest scale testing before spending time on gameplay. The original eight-hour
-window is a planning ceiling, not a guarantee that builds/device access fit. Stop after each
-requested step and record pending work; flight and touch do not block coursework graybox review.
-T016 records each increment rather than waiting for the flight loop. No HTML dashboard now.
+Execution follows tasks.md. Physical scale/comfort and device flight checks remain pending user-performed acceptance gates; they do not block Editor implementation. Codex performs no APK builds, device inventory or repeated foundation checks. Estimates remain provisional; request one implementation stage at a time. T016 records concise evidence; no HTML dashboard.
 
 ## Complexity Tracking
 

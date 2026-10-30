@@ -41,7 +41,7 @@ Quest is primary; Editor may use the existing XR simulator or inexpensive keyboa
 Existing smoke scene behavior/profile policies must remain available.
 Disable old input and rig before enabling the new set; repeated selection is idempotent.
 Exactly one active Camera and AudioListener; one command source when flight is implemented,
-none during static observation. Android touch is secondary/later; Windows player is optional.
+none during static observation. Android touch is secondary but included in the minimal prototype; Windows player is optional. Reuse FoundationMode runtime switching; no second mode owner.
 Reuse VRRig, disabling VRSmokeTest only on the flight instance. Its simulator activation
 must remain Editor-only without relying on the disabled smoke adapter.
 
@@ -80,20 +80,15 @@ exercise the actual detector, not a parallel mock detector. Editor-only Space us
 motor action. Optional concise detected/rearmed diagnostics suffice; no new framework,
 debug UI, Meta XR Simulator or XR package changes. Validate real gestures/comfort on Quest 2.
 
-## Guarded build selection (before static Quest trial, not during Step 1)
+## Guarded build selection (T011 preparation; user builds/testing at the end)
 
 Native profiles keep distinct IDs and XR policies. Their sole enabled entry scene must be
 exactly FoundationSmoke or FlightPrototype, never an arbitrary bypass or an accidental list
 containing both. The existing guard retains scene/define/loader/startup/feature validation.
-Flight output is Builds/QuestStandalone/FlightPrototype.apk (and, only if later built,
-Builds/AndroidTouch/FlightPrototype.apk); foundation output paths stay unchanged.
+Flight output is Builds/QuestStandalone/FlightPrototype.apk (and Builds/AndroidTouch/FlightPrototype.apk for the user-run Android build); foundation output paths stay unchanged.
 Select the entry scene explicitly through Editor profile settings; restore/select the smoke
 entry and validate relevant selection checks as a regression; do not repeat foundation builds.
 
 ## Evidence contract
 
-For each implemented task record date, actual tuning/mode, Editor result, automated result,
-build result, actual device/OS and manual observations separately. A flight build needs its
-own artifact identity; earlier foundation APKs do not contain flight. No comfort/performance
-pass without actual observations/measurements. Update existing validation and AI/asset docs;
-all outstanding foundation acceptance remains outstanding until its own criteria pass.
+For each implemented task record focused Editor checks, actual tuning and pending manual outcomes. The user owns Android/Quest APK builds, installation and physical validation after T011; Codex does not perform builds, device inventory or repeated foundation checks. Separate stationary scale/viewpoint comfort, moving flight and Android touch observations. No device/OS/hash collection is required absent a concrete issue. No comfort/performance pass without actual observations/measurements; preserve existing foundation evidence.

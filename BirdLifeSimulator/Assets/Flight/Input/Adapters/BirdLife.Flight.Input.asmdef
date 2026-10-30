@@ -1,0 +1,6 @@
+{
+    "name": "BirdLife.Flight.Input",
+    "rootNamespace": "BirdLife.Flight",
+    "references": ["BirdLife.Flight", "Unity.InputSystem", "Unity.XR.CoreUtils"],
+    "autoReferenced": true
+}

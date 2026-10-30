@@ -11,6 +11,8 @@ Checkpoint clarification: refuge start/reset and open exploration clearing; one 
 button selects the two static viewpoints in the same APK. T017 records real button/joystick
 flight validation before T013 gesture tuning. These are planned behaviors, not new test results.
 
+Execution-order amendment (2026-10-30): the current order and user-owned end gates in tasks.md supersede the earlier static-before-implementation and gestures-before-touch sequencing below. Retain the shared motor, separate adapters and tracked-camera decisions; no new research or device inventory is required.
+
 Workflow note: the installed specify/plan/tasks skills and template structures were read.
 PowerShell execution policy blocked resolve-template/setup-plan (and therefore setup-tasks
 was not attempted). No policy was changed or bypassed. No preset/override/extension directories

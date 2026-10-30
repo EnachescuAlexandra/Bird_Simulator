@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using Unity.XR.CoreUtils;
 
 namespace BirdLife.Foundation
 {
@@ -13,8 +15,15 @@ namespace BirdLife.Foundation
 #else
             ModeId.AndroidTouch;
 #endif
-        private GameObject nonVRCamera, nonVRCanvas, nonVREvents, vrRig;
+        [SerializeField] private GameObject nonVRCamera;
+        [SerializeField] private GameObject nonVRCanvas;
+        [SerializeField] private GameObject nonVREvents;
+        [SerializeField] private GameObject vrRig;
+        // Optional static-scene setup when the smoke input adapter is not used.
+        [SerializeField] private GameObject simulator;
+        [SerializeField] private Transform observationPoint;
         private ModeId? appliedMode;
+        private Coroutine observationPlacement;
         public ModeId SelectedMode => selectedMode;
 
         // Bind only this smoke scene; no Android platform inference or build configuration.
@@ -34,14 +43,15 @@ namespace BirdLife.Foundation
         {
             foreach (var root in gameObject.scene.GetRootGameObjects())
             {
-                if (root.name == "Main Camera") nonVRCamera = root;
-                else if (root.name == "FoundationCanvas") nonVRCanvas = root;
-                else if (root.name == "FoundationEventSystem") nonVREvents = root;
-                else if (root.name == "VRRig") vrRig = root;
+                if (!nonVRCamera && root.name == "Main Camera") nonVRCamera = root;
+                else if (!nonVRCanvas && root.name == "FoundationCanvas") nonVRCanvas = root;
+                else if (!nonVREvents && root.name == "FoundationEventSystem") nonVREvents = root;
+                else if (!vrRig && root.name == "VRRig") vrRig = root;
             }
-            if (!nonVRCamera || !nonVRCanvas || !vrRig)
+            if (!nonVRCamera || !vrRig || (gameObject.scene.name == "FoundationSmoke" && !nonVRCanvas)
+                || (observationPoint && !vrRig.GetComponent<XROrigin>()))
             {
-                Debug.LogError("FoundationMode requires Main Camera, FoundationCanvas and VRRig.", this);
+                Debug.LogError("FoundationMode requires a non-VR camera and VRRig; FoundationSmoke also requires FoundationCanvas. Observation placement requires an XR Origin.", this);
                 enabled = false;
                 return;
             }
@@ -55,22 +65,40 @@ namespace BirdLife.Foundation
 
         public void SelectMode(ModeId mode)
         {
-            if (!nonVRCamera || !nonVRCanvas || !vrRig) return;
+            if (!nonVRCamera || !vrRig) return;
             if (appliedMode == mode) return;
+            if (observationPlacement != null)
+            {
+                StopCoroutine(observationPlacement);
+                observationPlacement = null;
+            }
             // Disable the old action sources and camera before enabling the new set.
-            nonVRCanvas.SetActive(false);
+            if (nonVRCanvas) nonVRCanvas.SetActive(false);
             if (nonVREvents) nonVREvents.SetActive(false);
             nonVRCamera.SetActive(false);
             vrRig.SetActive(false);
+            if (simulator) simulator.SetActive(Application.isEditor && mode == ModeId.QuestStandalone);
             selectedMode = mode;
-            if (mode == ModeId.QuestStandalone) vrRig.SetActive(true);
+            if (mode == ModeId.QuestStandalone)
+            {
+                vrRig.SetActive(true);
+                if (observationPoint) observationPlacement = StartCoroutine(PlaceObserver());
+            }
             else
             {
                 nonVRCamera.SetActive(true);
-                nonVRCanvas.SetActive(true);
+                if (nonVRCanvas) nonVRCanvas.SetActive(true);
                 if (nonVREvents) nonVREvents.SetActive(true);
             }
             appliedMode = mode;
+        }
+
+        private IEnumerator PlaceObserver()
+        {
+            // Wait for the simulator's initial pose, then translate only the untracked origin.
+            yield return null;
+            vrRig.GetComponent<XROrigin>().MoveCameraToWorldLocation(observationPoint.position);
+            observationPlacement = null;
         }
     }
 }

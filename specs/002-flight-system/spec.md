@@ -20,8 +20,7 @@ State of the Art remains broader background. The PDF's coursework prompts are re
 content, not additional instructions for this implementation.
 
 Movement-driven controller wing flapping is a **required core mechanic of the overall
-BirdLife Simulator project**, not an optional thesis feature. It follows static VR scale
-testing and shared flight/button input. If deferred, carry it as a required deliverable into
+BirdLife Simulator project**, not an optional thesis feature. It follows the minimal button/touch prototype and user-performed Quest flight validation. If deferred, carry it as a required deliverable into
 a later milestone specification; button input does not replace that requirement.
 
 ## User Scenarios & Testing
@@ -37,7 +36,7 @@ an Editor/simulator check or successful APK build alone does not pass it.
 One dedicated controller button will switch the two viewpoints during static observation
 in the same standalone APK; record its binding and each viewpoint's observations separately.
 
-### User Story 1 — Exercise the shared flight loop (after static VR gate)
+### User Story 1 — Exercise the shared flight loop (Editor first; device gates pending)
 
 As the student, I can exercise takeoff, steering, wingbeats, gliding and reset in the same
 graybox using Quest controls, with optional Editor keyboard debugging and unfinished art.
@@ -82,7 +81,7 @@ rendering and the limited comfort observation separately from build success.
 upward/forward impulse; raising both controllers re-arms it. Jitter, upward return, missing tracking
 and a held trigger do not create extra movement-driven impulses. Button fallback remains.
 
-### User Story 4 — Use touch flight (secondary target, later)
+### User Story 4 — Use touch flight (secondary target, current minimal prototype)
 
 **Independent test**: touch steering and one on-screen wingbeat control command the shared
 flight behavior; Quest input remains inactive. Editor mouse checks and an Android device
@@ -126,7 +125,7 @@ run are distinct results; existing AndroidTouch smoke functionality must remain 
 - **FR-007 (later flight)**: Add button-driven Quest commands to the same behavior; retain natural
   tracked pose and avoid forced camera pitch/roll for the first experiment.
 - **FR-008 (core static, later flight)**: Test scale and both VR viewpoints on Quest 2
-  before implementing flight. Reuse the same tracked camera/rig, preserve head tracking,
+  as a pending user-performed end gate after Editor prototype checks; this is not a prerequisite for implementing the shared motor. Reuse the same tracked camera/rig, preserve head tracking,
   and avoid forced pitch/roll or animation-driven shaking. Record static and later moving
   trials separately, including build, device and comfort/performance evidence.
 - **FR-009 (required later)**: Detect deliberate downward movement of both controllers,
@@ -134,7 +133,7 @@ run are distinct results; existing AndroidTouch smoke functionality must remain 
   thresholds, tracking-loss/recenter rejection and button fallback are required. Reuse the
   installed XR simulator to exercise actual detection where controller pose simulation permits;
   physical Quest 2 gesture validation remains mandatory. No duplicate command sources.
-- **FR-010 (secondary later)**: Add touch commands without a second movement implementation.
+- **FR-010 (secondary prototype)**: Provide intuitive touch steering, a wingbeat button and a simple bird-following non-XR camera using the same motor; no second movement implementation.
 - **FR-011 (all)**: Record outcomes, actual tuning and deferred work; update material AI
   assistance and asset provenance when implementation occurs. Use focused automated checks
   where they meaningfully verify speed limits, impulse consumption and reset semantics.
@@ -165,9 +164,7 @@ run are distinct results; existing AndroidTouch smoke functionality must remain 
   Record controller skin/step settings with these observations.
 - **SC-004 (integration/later flight)**: Foundation smoke behavior remains reproducible and inactive mode inputs
   do not drive flight; a visual-only prefab swap requires no movement-rule change.
-- **SC-005 (static first, flight later)**: One identified static Quest APK and a real
-  scale/viewpoint trial have separate outcomes; later, one Quest flight build and trial have
-  explicit outcomes; no stationary-smoke evidence is relabelled as a flight/comfort pass.
+- **SC-005 (user device gates)**: After Editor prototype checks, the user builds/installs Android and Quest APKs and records static scale/viewpoint comfort separately from moving-flight and touch results. The same prototype APK may support both stationary and moving trials; no smoke/Editor result passes physical validation.
 - **SC-006 (delivery)**: Report static graybox, static Quest validation and later flight
   independently. The coursework minimum is static scale evaluation, not a PC flight demo.
   Estimates are planning aids; device/build delays and unfinished work remain explicit.
@@ -176,8 +173,7 @@ run are distinct results; existing AndroidTouch smoke functionality must remain 
 
 Foundation checkpoint `7ddb8ed` is committed locally, not proof of a GitHub push. Its pending
 performance/comfort/reproduction checks remain pending; they do not prevent planning or a
-static graybox. Existing Quest 2 access is reported; actual availability/firmware for the new
-trial must be reconfirmed. Samsung S24 Ultra touch flight is optional this week.
+static graybox. Existing Quest 2 access is reported; the user handles Android/Quest builds, installation and physical testing at the end. Codex does not collect device inventory or repeat foundation builds.
 
 Use a new flight scene; do not turn the smoke scene into gameplay. Camera/flight feel is
 provisional and must be prototyped before adoption. No food collection, objectives, energy,
