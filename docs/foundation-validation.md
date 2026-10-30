@@ -2,6 +2,74 @@
 
 # Foundation Validation
 
+## Feature 002 — static graybox only, 2026-10-30
+
+Separate increment; existing foundation acceptance and pending device/performance checks
+below are unchanged. T001 and T003 implementation/Editor verification completed; student
+visual review pending. No gameplay, bird, XR integration, build/profile change or APK trial.
+
+Baseline: branch main, HEAD `4f627ce`; nine modified files (manifest, lock, README and six
+002 documents), plus untracked ProBuilder Settings.json. Their existing work was retained.
+Unity 6000.3.25f1; ProBuilder 6.1.4, Pipeline 0.9.1-exp.1, Input System 1.20.0, URP 17.3.0,
+OpenXR 1.16.1 and XRI 3.3.2 retained. Live FoundationSmoke was clean, Play stopped.
+Main Modules final PDF supplied by the student informed the layout; ideal application
+systems are planned context, not this increment's acceptance scope. README URL not changed.
+
+Created `Assets/Scenes/FlightPrototype.unity` through the Editor using the one-time
+`Assets/Flight/Editor/FlightGrayboxBuilder.cs`; ordinary primitives and six plain URP
+materials under Assets/Flight/Materials, with Unity-generated metadata. ProBuilder was
+available; this simple layout needed no custom mesh editing. No imported art or new package.
+
+| Scene element | Actual dimensions in meters / placement |
+| --- | --- |
+| Ground | 60 x 0.4 x 60; top y=0 |
+| Clearing marker | 20 x 0.02 x 20; top y=0.02, no extra collider |
+| Trees | Eight 6–9 m tall; cylinder trunks 0.6 m diameter and simple spherical crowns |
+| Landmarks | Additional 10 m tree; standing stone 1.5 x 5 x 1.5 |
+| Shrubs | Six, each 2.8 x 1.3 x 2.2 |
+| Obstacles | Boulder 3 x 2 x 3; log 5 x 0.8 x 1.4 |
+| Refuge | 4 x 0.4 x 3 platform at (0,0,-18); 1.4 x 1.4 nest placeholder, open front; FutureBirdStart at (0,0.4,-17) |
+| Rest surfaces | Stump diameter 2, top y=1.2; shelf 3 x 2 x 2, top y=2 |
+| Food locations | (-13,0,-7), (12,0,13), (-9,0,20); each 2 m feeding patch and 0.4 m cube, no interaction/trigger |
+| Perimeter/height | Four 0.4 m-high edge strips inside +/-30 m; four thin 12 m corner markers, no roof |
+
+Executed checks: script imported/compiled successfully; Editor ready, compilationFailed=false,
+Console errors=0 and warnings=0 after creation. Scene contains 75 GameObjects, 50 renderers,
+39 colliders, exactly three food-location roots, eight trees plus tree landmark, six shrubs,
+two landmarks and two rest surfaces. No missing scripts/materials/shaders; all new authored
+assets have .meta files. All environment renderer bounds fit +/-30 m and y<=12. A 40 m
+forward ray at y=1 from (0,1,-16) confirms the central corridor is clear; this is not a
+complete route/collision gameplay test. Save/reopen succeeded with dirty=false. Second
+generation was deliberately refused; saved scene bytes unchanged. Scene screenshot inspected
+at `BirdLifeSimulator/Temp/FlightGraybox-Step1.png` (local ignored evidence).
+
+SHA256 before/after matched for FoundationSmoke, VRRig, manifest, lock, README and ProBuilder
+Settings.json. No new tracked configuration/profile/guard changes or staged files. Constitution
+and AGENTS unchanged. Foundation builds/tests were not repeated. Pipeline stopped on assembly
+reload with Auto Start disabled; the student restarted it, then MCP resumed successfully.
+
+Pending manual: inspect FlightPrototype in Scene view for recognizable landmarks, usable
+approaches and proportions. There is intentionally no runtime camera/AudioListener yet:
+Game view/Play is not the Step 1 review route. Next is T004/T008 (primitive bird and one
+reused XR rig), then viewpoints/guard, then a distinct static Quest APK and physical scale
+trial. Real Quest scale, visibility, orientation and perceived comfort are not validated.
+
+### Checkpoint review — known collider limitation
+
+Static inspection found default SphereColliders on the non-uniformly scaled shrubs and
+boulder, and a default CapsuleCollider on the flattened RestStump cylinder. These collision
+shapes do not match the visible surfaces; the earlier renderer dimensions and central-ray
+check do not establish contact accuracy. Keep this static scene editable, but inspect and
+adjust only those colliders in Unity before T005 movement verification, including a downward
+contact check on the stump's visible y=1.2 resting surface. Preserve the geometry and update
+the builder consistently if its collider setup is corrected.
+
+This checkpoint changed documentation only. MCP reported no connected Pipeline instance,
+so no collider correction or new Unity compilation/runtime verification was attempted.
+The scene/builder were preserved; this limitation remains pending, not a passed collision
+test. Planning now uses refuge start/reset, a dedicated button for switching both static
+viewpoints in one APK, and T017 real Quest flight validation before T013 gesture tuning.
+
 ## T001 Baseline — 2026-10-24
 
 **Result**: baseline recorded; T001 complete. No installation, Unity configuration, MCP mutation,

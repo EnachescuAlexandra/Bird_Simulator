@@ -47,6 +47,24 @@ review of third-party attribution/licenses was not explicitly confirmed, so T023
 partially complete; T024 reproduction remains pending. Existing defects/warnings and hardware identity gaps are
 recorded in [validation](foundation-validation.md).
 
+## Static graybox increment — 2026-10-30
+
+Codex read the student's finalized Main Modules PDF (including journey diagrams/storyboard),
+corrected the existing feature-002 plan for Quest-first development, and authored
+`Assets/Flight/Editor/FlightGrayboxBuilder.cs`. Unity Editor/MCP executed it to create
+`Assets/Scenes/FlightPrototype.unity`, six plain URP graybox materials and their metadata.
+Geometry uses Unity primitives; no external models, textures or sounds were imported.
+The one-time builder refuses existing output so subsequent manual layout edits are preserved.
+Codex verified compilation, references/counts, dimensions, central clearance, save/reopen,
+overwrite refusal and unchanged protected-file hashes; inspected a Scene-view screenshot.
+The student supplied requirements and restarted Pipeline after domain reload. Student visual
+review, real headset scale/comfort, bird, XR integration and flight remain pending. This
+increment does not extend earlier foundation/device evidence or claim human code review.
+Checkpoint cleanup subsequently aligned README/planning, added T017 physical flight validation
+and documented the collider mismatch. No scene/code correction or new Unity/device test
+was performed during cleanup; MCP was unavailable. All existing assets were preserved.
+
 Third-party samples are Unity-authored, not AI-generated; see
-[third-party assets](third-party-assets.md). No AI-created bird, forest art or flight system
-was added. Credentials and conversation transcripts are not part of this record.
+[third-party assets](third-party-assets.md). No final bird/forest artwork or flight system
+was added; the primitive graybox is temporary. Credentials and conversation transcripts
+are not part of this record.
