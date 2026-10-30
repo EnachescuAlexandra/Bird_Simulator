@@ -1,6 +1,6 @@
 # Public AI assistance disclosure
 
-Updated 2026-10-30 for the IMR weekly handoff. AI tool: OpenAI Codex, used with source inspection, PowerShell and Unity CLI/Pipeline. This prototype is AI-assisted work directed and physically tested by the student; it is not presented as entirely handwritten or independently audited code.
+AI tool: OpenAI Codex, used with source inspection, PowerShell and Unity CLI/Pipeline. This prototype is AI-assisted work directed and physically tested by the student; it is not presented as entirely handwritten or independently audited code.
 
 ## What AI helped with, and who decided
 
@@ -19,7 +19,7 @@ Updated 2026-10-30 for the IMR weekly handoff. AI tool: OpenAI Codex, used with 
 - **One movement implementation:** a shared FlightCommand/BirdMotor/FlightDynamics core replaced the need for separate Quest/Android movement rules; input remains platform-specific. [E02](ai-evidence/selected-excerpts.md#e02--shared-motor-separate-inputs)
 - **Evaluate the actual deliverable:** genuine ProBuilder geometry was required, rather than treating package installation or renamed primitives as completion. [E03](ai-evidence/selected-excerpts.md#e03--require-genuine-editable-geometry)
 - **Accept a human correction:** the student pointed out FoundationSmoke already switched modes during Play. Direct FoundationMode reuse was chosen over duplicating a scene or keeping a second selector. [E04](ai-evidence/selected-excerpts.md#e04--challenge-the-camera-mode-design)
-- **Diagnose instead of layering managers:** XRI can create an EventSystem when none is active. AI inspected that path and placed the Quest EventSystem under the existing rig so its lifetime follows rig activation; the student confirmed switching/UI behavior. This is a paraphrase of the S5 user-facing assistant message at JSONL line 2753, timestamp 2026-10-30T18:35:38.495Z, not a reconstructed quotation.
+- **Diagnose instead of layering managers:** XRI can create an EventSystem when none is active. AI inspected that path and placed the Quest EventSystem under the existing rig so its lifetime follows rig activation; the student confirmed switching/UI behavior. This is a paraphrase of the S5 user-facing assistant message at JSONL line 2753, not a reconstructed quotation.
 - **Use device feedback to revise priorities:** the student confirmed real Quest wingbeats/trigger fallback and Android controls, but reported arm fatigue, a third-person viewing-direction limitation, lag and an intermittent initial-view offset after restart. These observations led to deferred T020 investigation, not a claimed automatic camera fix or comfort pass. [E06–E08](ai-evidence/selected-excerpts.md#e06--physical-quest-feedback-and-fallback)
 
 ## What was actually verified
@@ -38,11 +38,11 @@ Timed route/glide checks, interruption/rearming/rejection cases, Android simulta
 Five project-associated Codex logs were found and a targeted message review was performed. Only selected genuine excerpts are published, with their original meaning preserved; headers/private context are omitted. Exact local filenames and raw messages remain private. Earlier unavailable brainstorming or missing device recordings are not reconstructed. This disclosure is prepared for professor review; the student should still check the attribution and choose what to demonstrate privately.
 
 <details>
-<summary>Historical component-level register and dated evidence (retain original scope)</summary>
+<summary>Historical component-level register and supporting evidence (retain original scope)</summary>
 
 # AI assistance record
 
-Historical register updated 2026-10-25. Tool: OpenAI Codex in VS Code, with PowerShell/file inspection
+Historical register. Tool: OpenAI Codex in VS Code, with PowerShell/file inspection
 and official Unity CLI/Pipeline MCP. This records material assistance, not human authorship
 or an assertion that every generated line has received a human code review.
 
@@ -69,27 +69,27 @@ Do not present AI-assisted implementation as entirely hand-written. Human design
 manual Unity actions and reported tests above remain distinct contributions. Original Unity
 samples retain their separate provenance in [third-party assets](third-party-assets.md).
 
-## Timeline and verification evidence
+## Recorded stages and verification evidence
 
-| Date | Contribution and affected artifacts | Verification / human involvement |
+| Stage | Contribution and affected artifacts | Verification / human involvement |
 | --- | --- | --- |
-| 2026-10-24 | Spec Kit constitution and technical-foundation specification, plan, research, contracts and tasks under `.specify/` and `specs/001-technical-foundation/` | User supplied scope, principles and staged instructions; future features excluded |
-| 2026-10-24 | Official CLI/Pipeline setup, local Unity skill and minimal user MCP entry | Executable/package/tool discovery and reversible Editor-object evidence recorded; user performed server starts/reloads; policies preserved |
-| 2026-10-24 | `Assets/Foundation/` shared target, input adapters, input asset, mode selector, VRRig and scene wiring | User supplied initial smoke geometry, approved non-VR scene save, and manually checked keyboard/button/simulator behavior; MCP verified isolation/compilation |
-| 2026-10-24 | Native build profiles, OpenXR/XRI setup and `FoundationBuildGuard.cs` | User configured Quest OpenXR validation; guard regression reported by user and corrected; post-fix Play and restart checks confirmed; effective XR policies checked |
-| 2026-10-24 | Both APK builds and manifest/report inspection | Both succeeded; SHA256, messages and limitations recorded; user subsequently reported Quest 2 tracking/trigger and Android 15 functionality |
-| 2026-10-25 | README, this record, attribution, validation/continuation/task updates and Git audit | Documentation/file inspection only; no new builds or implementation changes. `.utmp` ignore and removal of temporary constitution review comment verified from interrupted work |
-| 2026-10-25 | Week 2 specification, technical design/research, contracts, validation guide and tasks in `specs/002-flight-system/`; README roadmap | Student supplied milestone/scope and eight-hour budget. Codex inspected committed architecture and official movement/XR/input documentation; document consistency reviewed, no flight implementation/runtime/build/device test performed |
+| Foundation planning | Spec Kit constitution and technical-foundation specification, plan, research, contracts and tasks under `.specify/` and `specs/001-technical-foundation/` | User supplied scope, principles and staged instructions; future features excluded |
+| Tooling setup | Official CLI/Pipeline setup, local Unity skill and minimal user MCP entry | Executable/package/tool discovery and reversible Editor-object evidence recorded; user performed server starts/reloads; policies preserved |
+| Smoke implementation | `Assets/Foundation/` shared target, input adapters, input asset, mode selector, VRRig and scene wiring | User supplied initial smoke geometry, approved non-VR scene save, and manually checked keyboard/button/simulator behavior; MCP verified isolation/compilation |
+| Build configuration | Native build profiles, OpenXR/XRI setup and `FoundationBuildGuard.cs` | User configured Quest OpenXR validation; guard regression reported by user and corrected; post-fix Play and restart checks confirmed; effective XR policies checked |
+| Foundation builds | Both APK builds and manifest/report inspection | Both succeeded; SHA256, messages and limitations recorded; user subsequently reported Quest 2 tracking/trigger and Android 15 functionality |
+| Documentation review | README, this record, attribution, validation/continuation/task updates and Git audit | Documentation/file inspection only; no new builds or implementation changes. `.utmp` ignore and removal of temporary constitution review comment verified from interrupted work |
+| Flight planning | Week 2 specification, technical design/research, contracts, validation guide and tasks in `specs/002-flight-system/`; README roadmap | Student supplied milestone/scope and eight-hour budget. Codex inspected committed architecture and official movement/XR/input documentation; document consistency reviewed, no flight implementation/runtime/build/device test performed |
 
 Human confirmations cover the specific reported tests, not an independent audit of all code,
 licenses, documentation or performance. No measured frame timing, timed warm-up/observation,
-comfort acceptance or fresh README-based reproduction is claimed. On 2026-10-25 the student
+comfort acceptance or fresh README-based reproduction is claimed. The student
 confirmed reading and validating this AI record and the foundation documentation. Separate
 review of third-party attribution/licenses was not explicitly confirmed, so T023 remains
 partially complete; T024 reproduction remains pending. Existing defects/warnings and hardware identity gaps are
 recorded in [validation](foundation-validation.md).
 
-## Static graybox increment — 2026-10-30
+## Static graybox increment
 
 Codex read the student's finalized Main Modules PDF (including journey diagrams/storyboard),
 corrected the existing feature-002 plan for Quest-first development, and authored
@@ -110,7 +110,7 @@ Third-party samples are Unity-authored, not AI-generated; see
 [third-party assets](third-party-assets.md). No final bird/forest artwork or flight system
 was added; the primitive graybox is temporary. Credentials and full raw conversation transcripts are not published; selected reviewed excerpts are linked above.
 
-## Weekly flight prototype closure — 2026-10-30
+## Weekly flight prototype closure
 
 Codex assisted with ProBuilder/collider refinement; MockBlackbird procedural geometry, prefab and materials; FoundationMode reuse; VRViewpoint; Runtime/Core FlightCommand, FlightDynamics and BirdMotor; KeyboardFlightInput, QuestFlightInput, TouchFlightInput, MotionWingbeatInput, BirdFollowCamera and Flight.inputactions; scene wiring, native profile entry selection and FoundationBuildGuard. The student supplied priorities/design corrections and performed reported Editor, physical Quest 2 and Android tests. Codex consolidated Spec Kit/evidence/setup/provenance and authored docs/dashboard.html. Earlier pending statements describe the increment when written; later confirmations are in validation. Dashboard/document review and scoped Git checks are not new runtime/device tests, independent code review or comfort/performance certification. No final artwork or generated bitmap assets were introduced.
 </details>
