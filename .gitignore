@@ -83,3 +83,6 @@ gitleaks*.csv
 *.key
 id_rsa
 id_ed25519
+
+# Private learning notes and local audit evidence; public docs remain tracked.
+/local-notes/

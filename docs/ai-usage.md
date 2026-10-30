@@ -1,6 +1,48 @@
+# Public AI assistance disclosure
+
+Updated 2026-10-30 for the IMR weekly handoff. AI tool: OpenAI Codex, used with source inspection, PowerShell and Unity CLI/Pipeline. This prototype is AI-assisted work directed and physically tested by the student; it is not presented as entirely handwritten or independently audited code.
+
+## What AI helped with, and who decided
+
+| Activity | AI contribution | Student contribution / limits |
+| --- | --- | --- |
+| Brainstorming and scope discussion | Explored implementation options and tradeoffs within the supplied bird/woodland concept | Student supplied the thesis/educational concept, Main Modules reference and platform/coursework priorities. No separate pre-session brainstorming transcript is claimed. |
+| Critical design review | Compared scene duplication with component reuse; evaluated shared motor/adapters, tracked-camera ownership and ProBuilder choices | Student challenged over-complex approaches, required genuine editable geometry and corrected the required runtime mode-switching workflow. |
+| Specification and planning | Drafted/refined Spec Kit spec, plan, contract, task ordering and acceptance/evidence records | Student defined scope and later authorized reordering, implementation stages and scoped weekly closure. Detailed unperformed criteria remain T021. |
+| Code and scene authoring | Drafted/edited motor, platform adapters, gesture detector, viewpoint integration, procedural geometry, UI and narrow build tooling | Student supplied constraints, approved stages, operated Unity as needed and reviewed visible behavior; a complete independent line-by-line review is not asserted. |
+| Debugging and evaluation | Inspected XRI behavior and mode ownership; identified the extra EventSystem lifecycle problem and proposed a scene-local fix | Student reported defects, restarted tooling after reloads, confirmed UI/simulator behavior and performed physical tests. |
+| Documentation and dashboard | Wrote/refined README, disclosure, evidence summaries, task tracking and standalone HTML dashboard | Student requested the professor-facing handoff and supplied test outcomes/known limitations. No test result was invented to fill missing evidence. |
+
+## Concrete decisions, rather than code generation alone
+
+- **Preserve a known-good baseline:** the student explicitly prohibited repeating completed foundation setup. AI compared existing assets and evolved FlightPrototype while retaining FoundationSmoke. [E01](ai-evidence/selected-excerpts.md#e01--inspect-first-and-preserve-the-foundation)
+- **One movement implementation:** a shared FlightCommand/BirdMotor/FlightDynamics core replaced the need for separate Quest/Android movement rules; input remains platform-specific. [E02](ai-evidence/selected-excerpts.md#e02--shared-motor-separate-inputs)
+- **Evaluate the actual deliverable:** genuine ProBuilder geometry was required, rather than treating package installation or renamed primitives as completion. [E03](ai-evidence/selected-excerpts.md#e03--require-genuine-editable-geometry)
+- **Accept a human correction:** the student pointed out FoundationSmoke already switched modes during Play. Direct FoundationMode reuse was chosen over duplicating a scene or keeping a second selector. [E04](ai-evidence/selected-excerpts.md#e04--challenge-the-camera-mode-design)
+- **Diagnose instead of layering managers:** XRI can create an EventSystem when none is active. AI inspected that path and placed the Quest EventSystem under the existing rig so its lifetime follows rig activation; the student confirmed switching/UI behavior. This is a paraphrase of the S5 user-facing assistant message at JSONL line 2753, timestamp 2026-10-30T18:35:38.495Z, not a reconstructed quotation.
+- **Use device feedback to revise priorities:** the student confirmed real Quest wingbeats/trigger fallback and Android controls, but reported arm fatigue, a third-person viewing-direction limitation, lag and an intermittent initial-view offset after restart. These observations led to deferred T020 investigation, not a claimed automatic camera fix or comfort pass. [E06–E08](ai-evidence/selected-excerpts.md#e06--physical-quest-feedback-and-fallback)
+
+## What was actually verified
+
+Existing records distinguish Editor compilation/reference/motor checks from student-reported physical tests. The student reports that Quest launches and joystick, real two-controller wingbeats and trigger fallback work; Android launches and basic touch flight controls work. [E05–E08](ai-evidence/selected-excerpts.md#e05--human-editor-validation) and the [validation record](foundation-validation.md) preserve that distinction. T001–T018 are closed for weekly delivery/basic functional scope, not as a blanket pass of every original detailed criterion.
+
+Timed route/glide checks, interruption/rearming/rejection cases, Android simultaneous multi-touch and measured comfort/performance remain follow-up validation. No new Play session, APK build, device test or performance measurement was performed for this documentation audit. No authorship percentage, invented time log or claim of full human code review is supplied.
+
+## How the professor can inspect the workflow
+
+1. Read the [source inventory and privacy limits](ai-evidence/sources.md) and [genuine selected interaction excerpts](ai-evidence/selected-excerpts.md).
+2. Compare those instructions/reports with the [feature-002 tasks](../specs/002-flight-system/tasks.md), [contract](../specs/002-flight-system/contracts/flight.md) and [actual source](../BirdLifeSimulator/Assets/Flight/).
+3. Inspect the named commits with git show. Git establishes the recorded implementation changes; it does not independently prove device behavior.
+4. Read the [validation record](foundation-validation.md) for reported results and remaining limitations. Original logs exist privately; no raw session export is published.
+
+Five project-associated Codex logs were found and a targeted message review was performed. Only selected genuine excerpts are published, with their original meaning preserved; headers/private context are omitted. Exact local filenames and raw messages remain private. Earlier unavailable brainstorming or missing device recordings are not reconstructed. This disclosure is prepared for professor review; the student should still check the attribution and choose what to demonstrate privately.
+
+<details>
+<summary>Historical component-level register and dated evidence (retain original scope)</summary>
+
 # AI assistance record
 
-Updated 2026-10-25. Tool: OpenAI Codex in VS Code, with PowerShell/file inspection
+Historical register updated 2026-10-25. Tool: OpenAI Codex in VS Code, with PowerShell/file inspection
 and official Unity CLI/Pipeline MCP. This records material assistance, not human authorship
 or an assertion that every generated line has received a human code review.
 
@@ -66,9 +108,9 @@ was performed during cleanup; MCP was unavailable. All existing assets were pres
 
 Third-party samples are Unity-authored, not AI-generated; see
 [third-party assets](third-party-assets.md). No final bird/forest artwork or flight system
-was added; the primitive graybox is temporary. Credentials and conversation transcripts
-are not part of this record.
+was added; the primitive graybox is temporary. Credentials and full raw conversation transcripts are not published; selected reviewed excerpts are linked above.
 
 ## Weekly flight prototype closure — 2026-10-30
 
 Codex assisted with ProBuilder/collider refinement; MockBlackbird procedural geometry, prefab and materials; FoundationMode reuse; VRViewpoint; Runtime/Core FlightCommand, FlightDynamics and BirdMotor; KeyboardFlightInput, QuestFlightInput, TouchFlightInput, MotionWingbeatInput, BirdFollowCamera and Flight.inputactions; scene wiring, native profile entry selection and FoundationBuildGuard. The student supplied priorities/design corrections and performed reported Editor, physical Quest 2 and Android tests. Codex consolidated Spec Kit/evidence/setup/provenance and authored docs/dashboard.html. Earlier pending statements describe the increment when written; later confirmations are in validation. Dashboard/document review and scoped Git checks are not new runtime/device tests, independent code review or comfort/performance certification. No final artwork or generated bitmap assets were introduced.
+</details>
