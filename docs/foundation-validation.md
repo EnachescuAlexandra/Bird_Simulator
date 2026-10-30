@@ -1002,3 +1002,47 @@ is an optional future maintenance decision, requiring approval before untracking
 tracked file requires automatic untracking; optional XRI/demo cleanup remains a separate
 dependency-checked Editor task. Local reports/credentials/cache/build outputs should remain
 excluded. All unfinished acceptance checks retain their previous status.
+
+## Feature 002 focused verification — 2026-10-30
+
+Evidence consolidated from completed increments; no Play rerun, device test or build in this review. Earlier foundation/task IDs above belong to feature 001.
+
+| Scope | Existing evidence reused | Still pending |
+| --- | --- | --- |
+| T009 shared motor | T005 deterministic checks: five separated wingbeats/cooldown, glide/descent, yaw, bounded velocity, reset priority and invalid tuning; motor contacts, horizontal/ceiling bounds and refuge reset. Peak actual speed 2.9418 m/s; T006 keyboard 2.959 m/s; T010 simulator cap 3 m/s and collision-follow error 0 m. These were temporary Editor checks, not Unity Test Runner output. | Two route cycles over 60 s with two resets; timed two-second post-apex glide/descent; held-input reset/focus/mode release-to-rearm. No unmeasured tolerance or comfort pass claimed. |
+| T015 Editor touch | Student confirmed joystick release-to-center, one wingbeat per press/no held repeat, refuge reset/camera-follow, Android -> Quest -> Android, continued Quest flight/viewpoints, UI hide/show and no new duplicate EventSystem warnings after the scene-local fix. | Physical Android simultaneous joystick/wingbeat multi-touch, interruptions and actual-device behavior. |
+| T013 gesture | Student confirmed that the simulated two-controller wingbeat moves the bird. Compilation passed during implementation. | Repeated upward rearming, single-hand/jitter/upward-motion rejection, tracking loss/regain/recenter/focus/mode safety, trigger fallback regression; physical Quest gestures/tuning/comfort. |
+
+Manual follow-up: in keyboard debugging or Quest button mode, fly past both landmarks twice over 60 s and reset twice. After an impulse reaches its apex, leave activation released and observe descent for two seconds. Hold activation across reset, focus loss and Android/Quest switching: no replay before release and a fresh press. In gesture mode test one hand/jitter/upward motion (no impulse), repeated raise/lower cycles (one impulse each), then interruption/recenter (fresh baseline plus upward recovery required). These outcomes remain pending until reported; existing foundation builds are not flight evidence.
+T011 preparation: both native profiles now select only FlightPrototype; original defines/XR policies retained. Compilation and the already-active AndroidTouch preflight passed. Quest scene/define/output configuration was inspected; its active-policy preflight remains user-performed after selection, avoiding changes to shared XR settings here. Guard retains scene/mode/XR/output checks and original smoke outputs. FoundationMode now applies profile defines in player Awake, leaving Editor switching intact. No new Play tests, APKs or device claims.
+
+### Feature 002 — physical Quest 2 report, 2026-10-30
+
+Student-reported physical-device results (not an automated test):
+
+- The Quest APK launches successfully.
+- Flight works with the left joystick, right trigger and real two-controller wingbeat gestures.
+- Trigger fallback is useful when arm movement becomes tiring.
+- Known viewpoint limitation: physical head movement changes the viewpoint relative to the bird. Turning the bird does not automatically rotate the XR camera; in third-person, the bird may leave the user's comfortable viewing direction. This observation does not establish a comfort pass.
+
+This is partial physical acceptance for T012/T017/T013, not completion of all their criteria. Untested stationary scale/viewpoint/comfort checks, the timed route/glide/reset checks, gesture rejection/rearming and tracking-loss/recenter/focus safety remain pending. Physical Android multi-touch also remains pending. No additional build, performance measurement or device test was performed by Codex.
+
+**Deferred TODO — professor design discussion:** evaluate a comfortable VR recenter/follow-view approach for the third-person viewing-direction limitation after discussing the design with the professor. Agree how it should interact with natural head tracking and both viewpoints before implementation, then validate comfort on Quest 2. No camera behavior changes are authorized or implemented by this TODO.
+### Weekly IMR grayboxing deliverable completed — 2026-10-30
+
+The student confirms that the weekly assignment is complete and FlightPrototype was manually tested on both physical Meta Quest 2 and Android. Quest flight works with the left joystick, right trigger, real two-controller wingbeat gestures and trigger fallback. On Android, the application launches and basic controls appear functional; this is a limited user observation, not exhaustive touch acceptance.
+
+The delivered editable graybox and mock bird satisfy the student-reported weekly coursework handoff. Flight, controller gestures, trigger fallback and Android controls are optional functionality beyond the professor's grayboxing requirement. Weekly completion does not imply full feature-002 acceptance or a measured VR comfort/performance pass.
+
+Still pending: physical Android simultaneous multi-touch and interruption/release cases; untested route/glide/reset criteria; gesture rejection/rearming and tracking-loss/recenter/focus safety; detailed scale/viewpoint and comfort acceptance. Existing reported third-person viewing-direction limitations remain. The student also observed lag; no cause, latency or frame-rate measurement has been established.
+
+Deferred future work (T019/T020 in feature-002 tasks): ground walking/steering without wingbeats; easier VR perspective switching, comfortable recenter/follow behavior and investigation of reported lag. Discuss viewpoint design with the professor before implementation. No locomotion or camera changes were made in this documentation update; no new Codex build, Play Mode session or device test was run.
+## Weekly closure and organization review — 2026-10-30
+
+Student confirms Quest APK launch, joystick steering, real two-controller wingbeats and right-trigger fallback, plus Android APK launch and basic touch flight controls. The weekly IMR grayboxing handoff, including physical Quest testing, is complete. Flight and cross-platform controls exceed the static graybox requirement. T001–T018 are closed for delivery/basic functional acceptance; unperformed original detailed checks are retained as T021, not silently passed. Earlier pending notes are historical. No repeated Play/build/device tests were performed for closure.
+
+T020 also records a new limitation: after restarting/re-entering Quest, the initial viewpoint can be offset beside the bird rather than at its intended first/third-person position. Investigate XR tracking-origin initialization, recentering and viewpoint offsets after professor design discussion, alongside switching usability, follow direction and reported lag. No root cause, measured performance or comfort pass is asserted; camera behavior is unchanged.
+
+Organization: root contains the Unity project, specs and documentation. Assets/Flight groups the editor builder, platform-independent Runtime/Core assembly, Input/Adapters assembly, materials and replaceable prefab. BirdFollowCamera currently shares the integration assembly under Input/Adapters; moving it solely for aesthetics is unnecessary. FoundationMode owns platform selection; QuestFlightInput is the sole Quest command producer. Platform EventSystems have separate activation lifetimes, not two active UI owners. FoundationSmoke and original rig remain references; FlightPrototype is the gameplay scene. Imported samples/tutorials remain; removal needs a Unity dependency review.
+
+Obsolete local StaticGrayboxView.cs/.meta has no serialized GUID references: excluded from the commit, retained rather than deleted. Empty Resources/.meta is excluded. ProBuilder preferences and additional Android-profile preload/batching serialization are preserved locally and excluded; only the reviewed FlightPrototype entry change is staged from that profile. No Unity assets/GUIDs were moved or regenerated. Outputs/caches/Temp/logs are excluded. Independent code/license review is not implied; exact elapsed development time was not collected.

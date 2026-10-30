@@ -68,3 +68,7 @@ Third-party samples are Unity-authored, not AI-generated; see
 [third-party assets](third-party-assets.md). No final bird/forest artwork or flight system
 was added; the primitive graybox is temporary. Credentials and conversation transcripts
 are not part of this record.
+
+## Weekly flight prototype closure — 2026-10-30
+
+Codex assisted with ProBuilder/collider refinement; MockBlackbird procedural geometry, prefab and materials; FoundationMode reuse; VRViewpoint; Runtime/Core FlightCommand, FlightDynamics and BirdMotor; KeyboardFlightInput, QuestFlightInput, TouchFlightInput, MotionWingbeatInput, BirdFollowCamera and Flight.inputactions; scene wiring, native profile entry selection and FoundationBuildGuard. The student supplied priorities/design corrections and performed reported Editor, physical Quest 2 and Android tests. Codex consolidated Spec Kit/evidence/setup/provenance and authored docs/dashboard.html. Earlier pending statements describe the increment when written; later confirmations are in validation. Dashboard/document review and scoped Git checks are not new runtime/device tests, independent code review or comfort/performance certification. No final artwork or generated bitmap assets were introduced.

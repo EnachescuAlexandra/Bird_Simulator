@@ -7,15 +7,20 @@ namespace BirdLife.Flight
     [DefaultExecutionOrder(-100)] // Sample before BirdMotor.Update (+100); follow after all Updates.
     public sealed class QuestFlightInput : MonoBehaviour
     {
+        public enum WingbeatSource { TriggerOnly, MotionWithTriggerFallback }
+
         [SerializeField] private BirdMotor motor;
         [SerializeField] private XROrigin origin;
         [SerializeField] private Transform observationPoint;
         [SerializeField] private InputActionAsset actions;
+        [SerializeField] private MotionWingbeatInput motionWingbeat;
+        [SerializeField] private WingbeatSource wingbeatSource = WingbeatSource.TriggerOnly;
 
         private InputActionMap quest;
         private InputAction move, wingbeat, reset;
         private bool wingbeatArmed, resetArmed, following;
         private Vector3 previousBirdPosition;
+        private WingbeatSource appliedWingbeatSource;
 
         private void Awake()
         {
@@ -31,11 +36,19 @@ namespace BirdLife.Flight
             reset = quest.FindAction("Reset", true);
             wingbeat.wantsInitialStateCheck = reset.wantsInitialStateCheck = true;
             previousBirdPosition = motor.transform.position;
+            appliedWingbeatSource = wingbeatSource;
         }
 
         private void Update()
         {
             if (quest == null) return;
+            if (wingbeatSource != appliedWingbeatSource)
+            {
+                motionWingbeat?.ResetHistory();
+                wingbeatArmed = resetArmed = false;
+                appliedWingbeatSource = wingbeatSource;
+                return;
+            }
             if (!origin.gameObject.activeInHierarchy || !Application.isFocused || !motor.isActiveAndEnabled)
             {
                 StopInput();
@@ -44,6 +57,7 @@ namespace BirdLife.Flight
             if (!quest.enabled)
             {
                 quest.Enable();
+                motionWingbeat?.ResetHistory();
                 wingbeatArmed = resetArmed = false;
                 return; // Initial held input must release before requesting a new action.
             }
@@ -56,10 +70,17 @@ namespace BirdLife.Flight
             {
                 wingbeatArmed = resetArmed = false;
                 motor.ClearInput();
+                motionWingbeat?.ResetHistory();
                 motor.Submit(new FlightCommand(0f, 0f, reset: true));
                 return;
             }
-            if (doWingbeat) wingbeatArmed = false;
+            if (doWingbeat)
+            {
+                wingbeatArmed = false;
+                motionWingbeat?.ResetHistory();
+            }
+            else if (wingbeatSource == WingbeatSource.MotionWithTriggerFallback && motionWingbeat)
+                doWingbeat = motionWingbeat.SampleWingbeat();
             Vector2 axes = move.ReadValue<Vector2>();
             motor.Submit(new FlightCommand(axes.x, axes.y, doWingbeat));
         }
@@ -85,6 +106,7 @@ namespace BirdLife.Flight
                 if (motor) motor.ClearInput();
             }
             wingbeatArmed = resetArmed = false;
+            motionWingbeat?.ResetHistory();
         }
 
         private void OnDisable()

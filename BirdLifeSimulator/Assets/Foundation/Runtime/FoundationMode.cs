@@ -41,6 +41,12 @@ namespace BirdLife.Foundation
 
         private void Awake()
         {
+            // Serialized Editor preview selection must not override the selected player profile.
+#if BIRDLIFE_QUEST && !UNITY_EDITOR
+            selectedMode = ModeId.QuestStandalone;
+#elif BIRDLIFE_TOUCH && !UNITY_EDITOR
+            selectedMode = ModeId.AndroidTouch;
+#endif
             foreach (var root in gameObject.scene.GetRootGameObjects())
             {
                 if (!nonVRCamera && root.name == "Main Camera") nonVRCamera = root;

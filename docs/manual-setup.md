@@ -167,3 +167,7 @@ files independently of profiles merely to reduce the diff. Samples and their met
 Pipeline Auto Start=false is intentionally retained; manual server start after reload remains
 documented. Public setup examples use configurable paths; privacy-normalized tested paths in the
 validation history retain provenance without the local account name. Nothing has been staged, committed or pushed.
+
+## Weekly FlightPrototype handoff — 2026-10-30
+
+Open Assets/Scenes/FlightPrototype.unity. StaticObservation/FoundationMode selects Android Touch or Quest Standalone. Enable KeyboardFlightInput for Editor keyboard debugging; touch ownership/UI then becomes inactive. The [feature-002 quickstart](../specs/002-flight-system/quickstart.md) records simulator bindings and existing profile/output selection. The [dashboard](dashboard.html) summarizes delivered work and follow-up validation. Student reports both APKs launch and core controls work; edge/comfort/multi-touch checks remain T021. Restart viewpoint offsets and lag are deferred under T020. No setup or XR policy was changed in this closure.

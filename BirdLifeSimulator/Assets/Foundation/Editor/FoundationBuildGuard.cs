@@ -20,6 +20,8 @@ namespace BirdLife.Foundation.Editor
         const string Folder = "Assets/Settings/Build Profiles/";
         const string Loader = "UnityEngine.XR.OpenXR.OpenXRLoader";
         const string TransitionKey = "BirdLife.Foundation.PlayTransition";
+        const string SmokeScene = "Assets/Scenes/FoundationSmoke.unity";
+        const string FlightScene = "Assets/Scenes/FlightPrototype.unity";
         static bool stableEditMode;
         public int callbackOrder => -1000;
         static FoundationBuildGuard()
@@ -34,7 +36,19 @@ namespace BirdLife.Foundation.Editor
 
         static bool IsQuest(BuildProfile p) => AssetDatabase.GetAssetPath(p) == Folder + "QuestStandalone.asset";
         static bool IsKnown(BuildProfile p) => p && (IsQuest(p) || AssetDatabase.GetAssetPath(p) == Folder + "AndroidTouch.asset");
-        public static string Output(bool quest) => Path.GetFullPath("Builds/" + (quest ? "QuestStandalone/QuestStandalone.apk" : "AndroidTouch/AndroidTouch.apk"));
+        static string EntryScene(BuildProfile profile)
+        {
+            if (!profile) return null;
+            var scenes = profile.GetScenesForBuild().Where(s => s.enabled).ToArray();
+            return scenes.Length == 1 ? scenes[0].path : null;
+        }
+
+        public static string Output(bool quest)
+        {
+            string name = EntryScene(BuildProfile.GetActiveBuildProfile()) == FlightScene
+                ? "FlightPrototype" : quest ? "QuestStandalone" : "AndroidTouch";
+            return Path.GetFullPath("Builds/" + (quest ? "QuestStandalone/" : "AndroidTouch/") + name + ".apk");
+        }
 
         static bool CanSynchronize => stableEditMode && !SessionState.GetBool(TransitionKey, false)
             && !EditorApplication.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode
@@ -131,7 +145,8 @@ namespace BirdLife.Foundation.Editor
             bool quest = IsQuest(profile);
             string define = quest ? "BIRDLIFE_QUEST" : "BIRDLIFE_TOUCH";
             if (!profile.scriptingDefines.Contains(define) || profile.scriptingDefines.Contains(quest ? "BIRDLIFE_TOUCH" : "BIRDLIFE_QUEST")) return "Profile mode defines mismatch.";
-            if (profile.GetScenesForBuild().Count(s => s.enabled) != 1 || !profile.GetScenesForBuild().Any(s => s.enabled && s.path == "Assets/Scenes/FoundationSmoke.unity")) return "Smoke scene list mismatch.";
+            string scene = EntryScene(profile);
+            if (scene != SmokeScene && scene != FlightScene) return "Enable exactly one entry scene: FoundationSmoke or FlightPrototype.";
             var general = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(BuildTargetGroup.Android);
             if (!general || !general.Manager) return "Android XR settings missing.";
             var property = new SerializedObject(general).FindProperty("m_InitManagerOnStart");
@@ -145,6 +160,14 @@ namespace BirdLife.Foundation.Editor
                 if (f.enabled != (quest && required)) return "OpenXR feature policy mismatch: " + f.name;
             }
             return null;
+        }
+
+        [MenuItem("BirdLife/Validate Active Profile")]
+        public static void ValidateSelection()
+        {
+            var error = ValidateActive();
+            if (error != null) Debug.LogError(error);
+            else Debug.Log("Build profile ready: " + Output(IsQuest(BuildProfile.GetActiveBuildProfile())));
         }
 
         public void OnPreprocessBuild(BuildReport report)

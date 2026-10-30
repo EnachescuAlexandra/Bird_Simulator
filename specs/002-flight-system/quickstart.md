@@ -117,3 +117,19 @@ Touch (T014 before focused T009/T015): intuitive steering/wingbeat UI and the ex
 Record completed checks and pending manual work in docs/foundation-validation.md; update
 docs/ai-usage.md for material assistance and docs/manual-setup.md only when setup changes.
 Static Editor evidence is separate; no Quest build/device or flight pass is implied.
+
+## User build handoff (T011 prepared; no APK built by Codex)
+
+Stop Play and wait for compilation/import. Both existing native profiles have Override Global Scene List enabled with only Assets/Scenes/FlightPrototype.unity checked.
+
+1. For Android, choose **BirdLife > Select AndroidTouch**. Wait for synchronization, then **BirdLife > Validate Active Profile**. A successful message gives the expected output. In **File > Build Profiles**, confirm AndroidTouch is active and only FlightPrototype is enabled; choose Build and save to `Builds/AndroidTouch/FlightPrototype.apk` relative to BirdLifeSimulator/.
+2. For Quest, choose **BirdLife > Select QuestStandalone**. Wait for compilation and the existing XR synchronization, then **BirdLife > Validate Active Profile**. Confirm QuestStandalone and its single FlightPrototype entry in Build Profiles; choose Build to `Builds/QuestStandalone/FlightPrototype.apk`.
+
+Inspector Selected Mode controls Editor preview; the player uses the existing BIRDLIFE_TOUCH/BIRDLIFE_QUEST profile define. Do not manually reconfigure XR: the existing profile-selection workflow applies each policy. Only AndroidTouch preflight was executed in this preparation; Quest preflight must succeed after selection before its user-run build. Stop on a validation error.
+
+FoundationSmoke remains available: in the selected profile's scene list, replace the flight entry with the sole enabled `Assets/Scenes/FoundationSmoke.unity`, then reselect the profile and validate. Original smoke filenames remain AndroidTouch.apk / QuestStandalone.apk in their corresponding folders. Never enable both entry scenes together.
+
+Before accepting flight, complete the remaining manual T009/T013 checks in `docs/foundation-validation.md`. Physical Android multi-touch, Quest static scale/viewpoint comfort (T012), moving flight (T017) and real two-controller gestures remain pending user-performed checks. Build success alone does not pass these gates.
+## Milestone closure — 2026-10-30
+
+The student has built/launched FlightPrototype on Quest 2 and Android and confirms Quest joystick/trigger/real wingbeat flight plus basic Android touch flight. Weekly grayboxing is complete. Existing build handoff steps remain available; earlier pending notes describe that stage, not the current basic functional outcome. T001–T018 are closed for weekly delivery; unperformed detailed validation remains T021. Known restart/re-entry viewpoint offset, third-person viewing direction and lag are T020, with no camera changes now. See the [dashboard](../../docs/dashboard.html) and authoritative tasks for current status.

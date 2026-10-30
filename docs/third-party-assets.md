@@ -48,3 +48,7 @@ not an authentication field. Prior read-only comparison matched the complete off
 ignoring line endings. The detected value is intentionally omitted here. Do not suppress the
 entire skill directory or Atlassian rule; any future scanner exception must be specific to
 this documented finding. No exception/configuration change was made during this audit.
+
+## Feature 002 procedural placeholders — 2026-10-30
+
+Woodland graybox and MockBlackbird are project-authored Unity primitive/ProBuilder 6.1.4 geometry and plain project materials, authored with Codex/Editor assistance. No external bird, vegetation, texture, sound or font was imported for this milestone. Existing Unity/XRI/Input System/ProBuilder package and sample provenance continues to apply. The dashboard uses system fonts and inline CSS/JavaScript with no external assets/dependencies. This provenance note does not assert independent license clearance.
