@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 using Unity.XR.CoreUtils;
+using UnityEngine.XR;
+using CommonUsages = UnityEngine.XR.CommonUsages;
 
 namespace BirdLife.Flight
 {
-    // View offsets only; FoundationMode retains ownership of platform activation.
+    // Owns flight-scene origin placement; FoundationMode retains platform activation.
     [DefaultExecutionOrder(-1100)]
     public sealed class VRViewpoint : MonoBehaviour
     {
@@ -19,34 +22,57 @@ namespace BirdLife.Flight
 
         [SerializeField] private InputAction toggleView = new InputAction("ToggleBirdView",
             InputActionType.Button, "<XRController>{RightHand}/secondaryButton"); // Quest B.
-        private Perspective appliedPerspective;
-        private bool armed;
+        [SerializeField] private InputAction recenter = new InputAction("RecenterBirdView",
+            InputActionType.Button, "<XRController>{LeftHand}/primaryButton"); // Quest X.
+        [SerializeField, Min(0.25f)] private float recenterHoldSeconds = 1f;
+        [Header("Optional seated turn-follow (Quest comfort testing required)")]
+        [SerializeField] private bool turnFollowEnabled = false;
+        [SerializeField, Min(0f), Tooltip("Maximum automatic yaw rotation in degrees per second.")]
+        private float turnFollowSpeed = 25f;
+        [SerializeField, Range(0f, 20f), Tooltip("Ignore horizontal yaw errors within this many degrees.")]
+        private float turnFollowDeadZone = 3f;
+        private bool armed, recenterArmed, following, paused, recenterRequested;
+        private bool turnFollowReady;
+        private BirdMotor birdMotor;
+        private Vector3 previousBirdPosition;
+        private float previousBirdYaw, turnFollowYawOffset;
+        private int trackedFrames;
+        private float recenterHeld;
+        private Vector3 previousAnchorPosition;
+        private Quaternion anchorYaw = Quaternion.identity;
+
+        // FoundationMode uses this to leave flight placement to this component.
+        public XROrigin Origin => origin;
 
         private void Awake()
         {
-            if (!origin || !bird || !observationPoint)
+            if (!origin || !origin.Camera || !bird || !observationPoint)
             {
                 Debug.LogError("VRViewpoint requires the existing XR Origin, bird root and observation point.", this);
                 enabled = false;
                 return;
             }
 
-            ApplyPerspective(false);
+            toggleView.wantsInitialStateCheck = recenter.wantsInitialStateCheck = true;
+            birdMotor = bird.GetComponent<BirdMotor>(); // Read-only teleport detection; no gameplay ownership.
+            UpdateAnchor();
         }
 
         private void Update()
         {
-            if (toggleView == null) return;
-            if (perspective != appliedPerspective) ApplyPerspective(origin.gameObject.activeInHierarchy);
-
-            bool useVR = origin.gameObject.activeInHierarchy;
-            if (useVR != toggleView.enabled)
+            bool useVR = origin.gameObject.activeInHierarchy && Application.isFocused && !paused;
+            if (!useVR)
             {
-                if (useVR) toggleView.Enable();
-                else toggleView.Disable();
-                armed = false;
+                SuspendView();
+                return;
             }
-            if (!useVR) return;
+            if (!toggleView.enabled || !recenter.enabled)
+            {
+                toggleView.Enable();
+                recenter.Enable();
+                return; // Let initial held-button state arrive before release-to-arm checks.
+            }
+            if (!following) return; // Tracking must settle before accepting view controls.
 
             // A held button on mode entry cannot switch perspective until released.
             if (!toggleView.IsPressed()) armed = true;
@@ -55,27 +81,135 @@ namespace BirdLife.Flight
                 armed = false;
                 perspective = perspective == Perspective.FirstPerson
                     ? Perspective.ThirdPerson : Perspective.FirstPerson;
-                ApplyPerspective(true);
+            }
+
+            if (!recenter.IsPressed())
+            {
+                recenterArmed = true;
+                recenterHeld = 0f;
+            }
+            else if (recenterArmed)
+            {
+                recenterHeld += Time.unscaledDeltaTime;
+                if (recenterHeld >= recenterHoldSeconds)
+                {
+                    recenterRequested = true;
+                    recenterArmed = false; // Exactly once per hold, including after resume.
+                    recenterHeld = 0f;
+                }
             }
         }
 
-        private void ApplyPerspective(bool moveOrigin)
+        private void UpdateAnchor()
         {
-            Vector3 target = bird.TransformPoint(perspective == Perspective.FirstPerson
-                ? firstPersonOffset : thirdPersonOffset);
-            Vector3 displacement = target - observationPoint.position;
-            observationPoint.position = target;
-            // Translate by the offset difference, preserving all tracked local head/controller poses.
-            if (moveOrigin) origin.transform.position += displacement;
-            appliedPerspective = perspective;
+            Vector3 forward = Vector3.ProjectOnPlane(bird.forward, Vector3.up);
+            if (forward.sqrMagnitude > 0.0001f)
+                anchorYaw = Quaternion.LookRotation(forward, Vector3.up);
+            observationPoint.SetPositionAndRotation(bird.position + anchorYaw *
+                (perspective == Perspective.FirstPerson ? firstPersonOffset : thirdPersonOffset), anchorYaw);
         }
 
-        private void OnDisable()
+        private bool HasTracking()
+        {
+            // Use the same Input System HMD source as TrackedPoseDriver (also works with XR Device Simulator).
+            var head = InputSystem.GetDevice<XRHMD>();
+            const InputTrackingState required = InputTrackingState.Position | InputTrackingState.Rotation;
+            if (head == null || !head.added || !head.enabled || !head.isTracked.isPressed
+                || ((InputTrackingState)head.trackingState.ReadValue() & required) != required)
+                return false;
+            var xrHead = UnityEngine.XR.InputDevices.GetDeviceAtXRNode(XRNode.Head);
+            return !xrHead.TryGetFeatureValue(CommonUsages.userPresence, out bool present) || present;
+        }
+
+        private void LateUpdate()
+        {
+            UpdateAnchor(); // Absolute bird-relative anchor, including Return to Nest teleports.
+            // The motor excludes Return to Nest teleports from ActualDisplacement.
+            bool discontinuity = (birdMotor && birdMotor.isActiveAndEnabled
+                && (bird.position - previousBirdPosition - birdMotor.ActualDisplacement).sqrMagnitude > 0.0001f)
+                || Mathf.Abs(Mathf.DeltaAngle(previousBirdYaw, anchorYaw.eulerAngles.y)) > 45f;
+            previousBirdPosition = bird.position;
+            previousBirdYaw = anchorYaw.eulerAngles.y;
+            if (!origin.gameObject.activeInHierarchy || !Application.isFocused || paused || !HasTracking())
+            {
+                SuspendView();
+                return;
+            }
+
+            // Allow tracked camera updates to arrive before placing it. Never rotate on recovery.
+            if (!following)
+            {
+                if (++trackedFrames < 3) return;
+                if (!origin.MoveCameraToWorldLocation(observationPoint.position)) return;
+                following = true;
+                turnFollowReady = false;
+            }
+            else
+            {
+                // Preserve natural local head movement; never pin the camera to the anchor each frame.
+                origin.transform.position += observationPoint.position - previousAnchorPosition;
+            }
+            previousAnchorPosition = observationPoint.position;
+
+            if (recenterRequested)
+            {
+                recenterRequested = false;
+                turnFollowReady = false; // Preserve this explicit calibration; do not undo it next frame.
+                // Looking vertically has no reliable horizontal facing: wait for another explicit hold.
+                if (Vector3.ProjectOnPlane(origin.Camera.transform.forward, Vector3.up).sqrMagnitude < 0.0001f)
+                    return;
+                if (origin.MatchOriginUpCameraForward(Vector3.up, observationPoint.forward))
+                    origin.MoveCameraToWorldLocation(observationPoint.position);
+            }
+            else
+                FollowBirdTurn(discontinuity);
+        }
+
+        private void FollowBirdTurn(bool discontinuity)
+        {
+            if (!turnFollowEnabled)
+            {
+                turnFollowReady = false;
+                return;
+            }
+
+            float birdYaw = anchorYaw.eulerAngles.y;
+            float originYaw = origin.transform.eulerAngles.y;
+            if (!turnFollowReady || discontinuity)
+            {
+                // Follow subsequent bird turns from the current calibration, never replay missed turns.
+                turnFollowYawOffset = Mathf.DeltaAngle(birdYaw, originYaw);
+                turnFollowReady = true;
+                return;
+            }
+
+            // Absolute yaw error avoids integrated drift. HMD facing is deliberately not part of the target.
+            float error = Mathf.DeltaAngle(originYaw, birdYaw + turnFollowYawOffset);
+            float remaining = Mathf.Max(0f, Mathf.Abs(error) - turnFollowDeadZone);
+            // Cap the time step so a frame stall cannot cause a sudden catch-up rotation.
+            float step = Mathf.Min(remaining, turnFollowSpeed * Mathf.Min(Time.deltaTime, 0.05f));
+            if (step > 0f)
+                origin.RotateAroundCameraUsingOriginUp(Mathf.Sign(error) * step);
+        }
+
+        private void SuspendView()
         {
             toggleView?.Disable();
-            armed = false;
+            recenter?.Disable();
+            armed = recenterArmed = following = recenterRequested = false;
+            trackedFrames = 0;
+            recenterHeld = 0f;
+            turnFollowReady = false;
         }
 
-        private void OnDestroy() => toggleView?.Dispose();
+        private void OnDisable() => SuspendView();
+        private void OnApplicationFocus(bool focused) { if (!focused) SuspendView(); }
+        private void OnApplicationPause(bool value) { paused = value; if (value) SuspendView(); }
+
+        private void OnDestroy()
+        {
+            toggleView?.Dispose();
+            recenter?.Dispose();
+        }
     }
 }

@@ -1,0 +1,23 @@
+# Tasks and evidence
+
+- [x] Inspect relevant movement state, food placeholders and current UI approach.
+- [x] Implement reusable per-portion FoodCollectible with grounded proximity gating and one-time feedback.
+- [x] Wire only location 01 and its world-space feedback through Unity Editor tools; preserve existing geometry and references.
+- [x] Unity recompilation completed without errors. Scene checks confirmed exactly one collectible, all references, world-space Canvas, built-in font, non-interactive text and all three initial food visuals active. Targeted assertions in a disposable Editor preview scene passed: outside-radius rejection, active-flight rejection even with ground contact, rejection without ground contact, grounded collection hiding the visual and setting text, and no repeated side effects after collection. This is not an interactive Play Mode or headset test.
+- [x] User-confirmed XR Device Simulator results (2026-11-03): approaching on the ground collects automatically; the visual disappears; `Food collected! (1/1)` appears; the same portion cannot be collected twice; Return to Nest preserves collection state.
+- [ ] Remaining manual acceptance: flight-only/airborne collection rejection, radius boundary, landing, perspective/recenter and movement regression. Earlier isolated Editor assertions do not replace these manual checks.
+- [x] Organizational cleanup (2026-11-03): moved script and unchanged .meta through Unity AssetDatabase to Assets/Gameplay/Runtime, using namespace BirdLife.Gameplay and an explicit BirdLife.Flight import. No asmdef changes required. Focused Editor verification resolved the new compiled type with no compilation errors and confirmed GUID `6c2024c518b32014eab26328dabf5f84`, one attached component, unchanged Bird/Food Visual/Feedback fileIDs and 0.3 m radius. Comparison against the pre-cleanup scene snapshot found only the updated FoodCollectible editor class identifier; placement and all other scene settings are unchanged. Behavior tests after the move remain for the user; no APK built.
+- [ ] Physical Quest 2: collection, controls, text readability and T020 comfort/recovery regression (pending).
+- [ ] Physical Android: collection, touch controls and feedback readability (pending).
+
+T019/T020 validation items remain unchanged. No build, commit or push is part of this feature.
+
+## Focused weekly review — 2026-11-03
+
+- User confirms feature 003 still works in XR Device Simulator. Ground approach, hiding the visual, feedback, single collection and Return to Nest persistence retain their confirmed scope above. Flight-only collection rejection and physical Quest/Android food acceptance remain pending.
+- Latest Quest APK builds and launches successfully by user report; this does not establish food acceptance or close T019/T020 regression criteria. No build was generated during this review.
+- Read-only Editor inspection confirms `Assets/Gameplay/Runtime/FoodCollectible.cs`, namespace `BirdLife.Gameplay`, original GUID `6c2024c518b32014eab26328dabf5f84`, and live scene references to MockBlackbird, FoodPlaceholder and Message. Radius remains 0.3 m. No behavior or scene change was made.
+- Physical observations needing targeted follow-up: incomplete T020 alignment after large/repeated turns; apparent passage through some trees; controller models sometimes invisible near ground while input works. All nine graybox trees have active, non-trigger trunk/crown colliders on Default, and Default/Default collisions are enabled. Capsule trunk ends taper inside the cylindrical visuals (read-only sample at Tree_01: radius 0.27 m, height 0.05 m is about 0.068 m outside the capsule). This explains a possible low-trunk gap, not a proven cause of every reported passage. Controller renderers are enabled and included by the camera; low bird-relative viewpoint can place physically lower controllers beneath opaque ground. Positional tracking failure is not proven or excluded by working buttons.
+- Priorities: reproduce persistent yaw error versus transient lag; validate bird capsule contact at trunk centers and bases before replacing only mismatched trunk colliders with fitted simple boxes. Controller visibility is optional unless hiding prevents a required interaction; do not force models through the scene or alter tracked poses.
+
+Editor tooling note: Pipeline stopped after domain reload because its existing AutoStart setting is false; the user restarted it, then scene wiring and targeted assertions completed. Unity scene save also serialized existing Inspector values for T019/T020; those settings were preserved, not retuned for this feature. Unity-generated YAML contains the normal empty-field trailing spaces.

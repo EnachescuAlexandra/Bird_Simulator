@@ -88,7 +88,12 @@ namespace BirdLife.Foundation
             if (mode == ModeId.QuestStandalone)
             {
                 vrRig.SetActive(true);
-                if (observationPoint) observationPlacement = StartCoroutine(PlaceObserver());
+                // Flight owns its tracked placement; retain the smoke scene's existing fallback.
+                var viewpoint = GetComponent<BirdLife.Flight.VRViewpoint>();
+                bool flightPlacement = viewpoint && viewpoint.isActiveAndEnabled
+                    && viewpoint.Origin && viewpoint.Origin.gameObject == vrRig;
+                if (observationPoint && !flightPlacement)
+                    observationPlacement = StartCoroutine(PlaceObserver());
             }
             else
             {

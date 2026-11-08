@@ -2,7 +2,7 @@
 
 **Input**: [spec](spec.md), [plan](plan.md), [research](research.md),
 [state model](data-model.md), [contract](contracts/flight.md), [validation](quickstart.md).
-**Status**: Weekly milestone complete. T001–T018 closed for delivery/basic functional acceptance; T019/T020 deferred implementation and T021 unperformed follow-up validation remain open. Student confirms physical Quest 2 and Android launch/control tests.
+**Status**: Weekly milestone complete. T019 ground walking confirmed in Editor/XR Device Simulator; physical regression acceptance remains pending. T020 has simulator results and partial physical Quest observations, including incomplete alignment after large/repeated turns; it is not closed. Latest Quest APK build/launch succeeded by user report. Tree collision and ground-level controller visibility observations remain under investigation; T021 detailed validation remains open.
 **Paths**: Assets paths below are under BirdLifeSimulator/. Preserve .meta/GUIDs; scene/prefab
 edits through Editor/MCP. No package changes planned. Request/execute a stage before proceeding.
 
@@ -12,7 +12,7 @@ edits through Editor/MCP. No package changes planned. Request/execute a stage be
 
 ## Final weekly closure — 2026-10-30
 
-T001–T018 are delivered for this weekly milestone. Closure means implementation/basic functional acceptance supported by existing Editor evidence and student-reported physical Quest/Android tests, not a blanket pass of every original detailed check. Unperformed original validation criteria remain explicitly under T021. Earlier dated pending notes below are historical, superseded only for confirmed functional results. T019/T020 remain deferred. The dashboard is a dated snapshot; tasks.md is authoritative.
+T001–T018 are delivered for this weekly milestone. Closure means implementation/basic functional acceptance supported by existing Editor evidence and student-reported physical Quest/Android tests, not a blanket pass of every original detailed check. Unperformed original validation criteria remain explicitly under T021. Earlier dated pending notes below are historical, superseded only for confirmed functional results. T019/T020 were deferred at weekly closure; current follow-up status is recorded below. The dashboard is a dated snapshot; tasks.md is authoritative.
 
 ## Phase 1 — Setup
 
@@ -83,7 +83,7 @@ T001–T018 are delivered for this weekly milestone. Closure means implementatio
 
 ```text
 Delivered: T001–T018 (weekly milestone; scoped functional acceptance)
-Deferred implementation: T019 ground locomotion; T020 viewpoints/restart offset/lag
+Implemented follow-ups: T019 ground locomotion (Editor/simulator accepted); T020 Stages 1/2 (physical issues still open)
 Follow-up validation: T021 (unperformed checks retained, not passed)
 ```
 
@@ -94,11 +94,11 @@ Windows player work remains deferred. The user-authorized static dashboard is do
 input edge cases and useful verification remain applicable when flight is implemented.
 Only the requested step is authorized; scene mutations remain serialized.
 
-## Deferred future work (not scheduled or implemented)
+## Follow-up implementation and pending validation
 
 
-- [ ] T019 Ground locomotion: allow the blackbird to walk forward and steer on the ground without wingbeats. Agree behavior/tuning before implementation and retain one shared motor; this is outside the completed weekly assignment.
-- [ ] T020 VR viewpoint improvements: discuss the design with the professor, then evaluate easier perspective switching and comfortable recenter/follow behavior while preserving natural tracking. Investigate student-reported lag before choosing a fix; its cause and performance impact are unmeasured. Address the third-person viewing-direction limitation and validate comfort on physical Quest 2. Also investigate the reported Quest restart/re-entry offset: the initial viewpoint sometimes appears beside the bird instead of its intended first/third-person position. Examine XR tracking-origin initialization, recentering and viewpoint offsets in a future milestone. No camera change is implemented now.
+- [x] T019 **Implemented; ground walking accepted by the user in Editor/XR Device Simulator (2026-11-03).** Shared FlightDynamics/BirdMotor supports proportional forward walking at configurable 0.6 m/s, existing yaw steering and gravity, and retains CharacterController collision, takeoff/landing and reset paths. Earlier compilation passed; attempted isolated dynamics assertions did not execute after Pipeline disconnected. Physical Quest/Android T019 regression acceptance, ledge/obstacle checks and full transition/input-interruption criteria remain pending. Latest Quest build/launch success alone does not pass these checks.
+- [ ] T020 **Stages 1/2 implemented; simulator results confirmed, physical acceptance incomplete (2026-11-03).** Recenter and gradual turn-follow work by user report, but physical Quest occasionally remains incompletely aligned after large/repeated turns over 360 degrees. Read-only review: configured follow 25 deg/s versus bird yaw 45 deg/s creates expected lag; shortest-angle selection may reverse catch-up beyond 180 degrees, but pure math settles to the 3-degree dead zone after stopping. Recovery/discontinuity rebases turnFollowYawOffset to the current error, potentially preserving an unwanted offset; headset-facing is intentionally independent. Actual device cause requires a stop-and-wait trial and targeted yaw/reference/tracking observations. Physical comfort, headset removal/replacement, restart/re-entry and full regression validation remain pending.
 
 ## Follow-up validation (unperformed original criteria retained)
 

@@ -18,19 +18,21 @@ namespace BirdLife.Flight
         public float wingbeatCooldown = 0.15f;
         public float yawSpeed = 45f;
         public float throttleAcceleration = 1f;
+        [Min(0f), Tooltip("Forward walking speed at full directional input, in metres per second.")]
+        public float groundSpeed = 0.6f;
 
         public bool IsValid()
         {
             return Finite(minimumForwardSpeed) && Finite(maximumForwardSpeed) && Finite(maximumSpeed)
                 && Finite(gravity) && Finite(upwardImpulse) && Finite(forwardImpulse) && Finite(takeoffSpeed)
                 && Finite(minimumVerticalSpeed) && Finite(maximumVerticalSpeed) && Finite(wingbeatCooldown)
-                && Finite(yawSpeed) && Finite(throttleAcceleration)
+                && Finite(yawSpeed) && Finite(throttleAcceleration) && Finite(groundSpeed)
                 && minimumForwardSpeed >= 0f && maximumForwardSpeed >= minimumForwardSpeed
                 && maximumSpeed > 0f && maximumForwardSpeed <= maximumSpeed && gravity > 0f
                 && upwardImpulse > 0f && forwardImpulse > 0f && takeoffSpeed > 0f
                 && minimumVerticalSpeed < 0f && maximumVerticalSpeed > 0f
                 && takeoffSpeed <= maximumVerticalSpeed && wingbeatCooldown > 0f
-                && yawSpeed > 0f && throttleAcceleration > 0f;
+                && yawSpeed > 0f && throttleAcceleration > 0f && groundSpeed >= 0f;
         }
 
         internal static bool Finite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);
@@ -85,9 +87,18 @@ namespace BirdLife.Flight
                 }
                 Cooldown = tuning.wingbeatCooldown;
             }
-            if (!IsFlying) { Velocity = Vector3.zero; return; }
-
             Heading = Mathf.Repeat(Heading + command.Steer * tuning.yawSpeed * deltaTime, 360f);
+            if (!IsFlying)
+            {
+                // Reuse throttle as forward walking input; releasing it stops horizontal motion.
+                // Gravity still passes through BirdMotor's single CharacterController.Move, including off ledges.
+                vertical = Mathf.Clamp(vertical - tuning.gravity * deltaTime,
+                    tuning.minimumVerticalSpeed, 0f);
+                Velocity = Quaternion.Euler(0f, Heading, 0f) * Vector3.forward
+                    * (Mathf.Clamp01(command.Throttle) * tuning.groundSpeed) + Vector3.up * vertical;
+                return;
+            }
+
             // Zero speed after an obstacle stays zero until throttle or another impulse requests motion.
             forwardSpeed = Mathf.Clamp(forwardSpeed + command.Throttle * tuning.throttleAcceleration * deltaTime,
                 forwardSpeed > 0f ? tuning.minimumForwardSpeed : 0f, tuning.maximumForwardSpeed);
