@@ -9,6 +9,13 @@ The technical foundation, editable woodland graybox, shared flight/ground moveme
 VR viewpoint improvements and one-food collection prototype are implemented. Feeding missions
 and educational gameplay remain planned.
 
+## Current Demo Videos
+
+These videos demonstrate the current state of the prototype (Week 3):
+
+- [Meta Quest demonstration](demos/video_Meta_week3.mp4)
+- [Android demonstration](demos/video_android_week3.mp4)
+
 ## Author
 
 **Alexandra-Maria Enăchescu** · Group **3E1**
